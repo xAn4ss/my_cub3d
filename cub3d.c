@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 12:04:59 by an4ss             #+#    #+#             */
-/*   Updated: 2022/12/27 22:51:32 by an4ss            ###   ########.fr       */
+/*   Updated: 2022/12/28 22:26:07 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int ched_ched(int num, t_data *data)
     char *pixel; 
     int i = 0;
     printf("%d__\n", num);
-    if (num == 113 && data->map && data->map[(data->sh.y)/32][(data->sh.x-2-5)/32] != '1')
+    if (num == 0 && data->map && data->map[(data->sh.y)/32][(data->sh.x-2-5)/32] != '1')
     {
         mlx_destroy_image(data->mlx, data->img.img);
         data->img.img = mlx_new_image(data->mlx, 10, 10);
@@ -160,7 +160,7 @@ int ched_ched(int num, t_data *data)
         }
         mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
     }
-    if (num == 122 && data->map[(data->sh.y - 2-5)/32][(data->sh.x+10)/32] != '1')
+    if (num == 13 && data->map[(data->sh.y - 2-5)/32][(data->sh.x+10)/32] != '1')
     {
         mlx_destroy_image(data->mlx, data->img.img);
         data->img.img = mlx_new_image(data->mlx, 10, 10);
@@ -199,7 +199,7 @@ int ched_ched(int num, t_data *data)
         mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
 
     }
-    if (num == 100 && data->map[(data->sh.y+10)/32][(data->sh.x + 2+8)/32] != '1')
+    if (num == 2 && data->map[(data->sh.y+10)/32][(data->sh.x + 2+8)/32] != '1')
     {
         mlx_destroy_image(data->mlx, data->img.img);
         data->img.img = mlx_new_image(data->mlx, 10, 10);
@@ -237,7 +237,7 @@ int ched_ched(int num, t_data *data)
         }
         mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
     }
-    if (num == 115 && data->map[(data->sh.y +2+15)/32][(data->sh.x)/32] != '1')
+    if (num == 1 && data->map[(data->sh.y +2+15)/32][(data->sh.x+10)/32] != '1')
     {
         mlx_destroy_image(data->mlx, data->img.img);
         data->img.img = mlx_new_image(data->mlx, 10, 10);
@@ -276,6 +276,34 @@ int ched_ched(int num, t_data *data)
         mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);        
 
     }
+    return 0;
+}
+/*  DRAW LINE FROM PLAYER'S POSITION TO X,Y*/
+void draw_line(t_data *data, double x, double y)
+{
+
+    int dist = sqrt((((double)data->sh.x + x)*((double)data->sh.x + x)) + ((double)data->sh.y + y)*((double)data->sh.y + y));
+    printf("dist : %d\n", dist);
+    double Dx = data->sh.x - x;
+    double Dy = data->sh.y - y;
+    printf("Dx : %f\nDy :%f\n", Dx, Dy);
+    double Ux = Dx/dist;
+    double Uy = Dy/dist;
+    printf("Ux : %f\nUy :%f\n", Ux, Uy);
+    double pixX = data->sh.x;
+    double pixY = data->sh.y;
+    while (dist)
+    {
+        mlx_pixel_put(data->mlx, data->win, pixX, pixY, 0xFF0000);
+        pixX += Ux;
+        pixY += Uy;
+        dist--;
+    }
+}
+
+int rotate(int num, t_data *data)
+{
+    return 0;
 }
 
 int walo(t_data *data)
@@ -287,17 +315,15 @@ void    cub3d(t_data *data)
 {
     data->mlx = mlx_init();
     data->win = mlx_new_window(data->mlx, 850, 450, "kyub");
-    draw_map(data, data->mlx, data->win);
-    window_grid(data->mlx, data->win, data);
     data->img.img = mlx_new_image(data->mlx, 10, 10);
+    // draw_map(data, data->mlx, data->win);
     player(data);
-    // mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-    // mlx_put_image_to_window(data->mlx, data->win, data->img, 100, 100);
-
-    mlx_do_key_autorepeaton(data->mlx);
-    mlx_loop_hook(data->mlx, walo, &data);
-    mlx_hook(data->win,2, 1L>>0,ched_ched, data);
-    // mlx_destroy_image(data->mlx, data->img.img);
-	printf("salam\n");
+    // window_grid(data->mlx, data->win, data);
+    draw_line(data, 100, 120);
+    // mlx_do_key_autorepeaton(data->mlx);
+    // mlx_loop_hook(data->mlx, walo, &data);
+    // mlx_hook(data->win,2, 1L>>0,ched_ched, data);
+    mlx_hook(data->win,2, 1L>>0,rotate, data);
+    /*Delete old player position with key release*/
     mlx_loop(data->mlx);
 }
