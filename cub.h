@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:21:21 by ybachaki          #+#    #+#             */
-/*   Updated: 2022/12/27 22:32:46 by an4ss            ###   ########.fr       */
+/*   Updated: 2022/12/30 03:24:13 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <math.h>
 #include <ctype.h>
 #include"get_next_line.h"
 #include"Libft/libft.h"
-#include "../mlx.h"
-#include <X11/keysym.h>
+#include "mlx.h"
+// #include <X11/keysym.h>
 
 typedef struct s_sh {
 	int x;
 	int y;
+	double angle;
+	int rot;
+	int mov;
 	
 }	t_sh;
 
