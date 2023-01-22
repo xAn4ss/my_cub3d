@@ -20,7 +20,7 @@
 #include <ctype.h>
 #include"get_next_line.h"
 #include"Libft/libft.h"
-#include "mlx.h"
+#include "../minilibx-linux-master/mlx.h"
 // #include <X11/keysym.h>
 
 typedef struct s_sh {
@@ -39,6 +39,12 @@ typedef struct s_img{
 	int bpp;
 	int endian;
 } t_img;
+
+typedef struct s_ray{
+	int x;
+	int y;
+	int dist;
+} t_ray;
 
 typedef struct s_data {
 	char	*no;
