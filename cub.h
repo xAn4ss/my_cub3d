@@ -22,7 +22,8 @@
 #include"Libft/libft.h"
 #include "../minilibx-linux-master/mlx.h"
 // #include <X11/keysym.h>
-
+#define SCREEN_W 720
+#define SCREEN_H 480
 typedef struct s_sh {
 	int x;
 	int y;
@@ -66,6 +67,8 @@ typedef struct s_data {
 	
 }	t_data;
 
+int get_color(char *s);
+void    draw_background(t_data *data, int floorColor, int ceilColor);
 int		check_map_name(char *name);
 int		check_line(char **line, int x);
 int		check_file_content(int fd, t_data *data);
