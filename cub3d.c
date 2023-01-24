@@ -190,24 +190,46 @@ int cast_ray(t_data * data, t_ray rayX, t_ray rayY)
     if (abs(rayX.dist) < abs(rayY.dist))
     {
         dist = rayX.dist;
-        // printf("%d(%d,%d)\n", dist, rayX.x, rayX.y);
-        draw_line(data, rayX.x, rayX.y, moveX, moveY, 0xFF0000);
+        // draw_line(data, rayX.x, rayX.y, moveX, moveY, 0xFF0000);
         
     }
     else if(abs(rayX.dist) > abs(rayY.dist))
     {
         dist = rayY.dist;
-        // printf("%d(%d,%d)\n", dist, rayY.x, rayY.y);
-        draw_line(data, rayY.x, rayY.y, moveX, moveY, 0xFF0000);
+        // draw_line(data, rayY.x, rayY.y, moveX, moveY, 0xFF0000);
     }
+        printf("%d(%d,%d)\n", rayX.dist, rayX.x, rayX.y);
+        printf("%d(%d,%d)\n", rayY.dist, rayY.x, rayY.y);
     return (dist);
 }
 
-void cast_rays(t_data *data)
+void draw_shape(t_data *data, int width, int height, int x, int y)
 {
+    data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bpp, &data->img.len, &data->img.endian);
+    char *pixel; 
+    int i = 0;
+    int j;
+    while (i< width)
+    {
+        j = 0;
+        while (j<height)
+        {
+            pixel = data->img.addr + (j * data->img.len + i * (data->img.bpp / 8));
+            *(int*)pixel = 0xFFFFFF;
+            j++;
+        }
+        i++;
+    }
+
+    mlx_put_image_to_window(data->mlx, data->win, data->img.img, x, y);
+}
+
+void cast_rays(t_data *data, t_ray rayX, t_ray rayY)
+{
+    float dist;
+    int sizeH = 0;
+    int wallX = 0;
     int moveX, moveY = 0;
-    t_ray rayX;
-    t_ray rayY;
     if (data->sh.angle < 0)
         data->sh.angle = 2*M_PI - 5*M_PI/180;
     else if (data->sh.angle > 2*M_PI - 5*M_PI/180)
@@ -222,34 +244,40 @@ void cast_rays(t_data *data)
     // printf("ray: %f\n", rayY.angle*180/M_PI);
     while (rayX.angle < data->sh.angle + (M_PI/6))
     {
-        cast_ray(data, rayX, rayY);
-        // printf("%d(%d,%d)\n", dist, rayY.x, rayY.y);
-        rayX.angle += 1*M_PI/180;
-        rayY.angle += 1*M_PI/180;
+        dist = cast_ray(data, rayX, rayY);
+        // printf("%d\n", );
+        sizeH = (SCREEN_H/dist)*70;
+        // if (sizeH > 0)
+        // {
+            data->img.img = mlx_new_image(data->mlx, 3, sizeH);
+            draw_shape(data, 3, sizeH, wallX, (SCREEN_H/2) - (sizeH/2));
+            printf("------\n");
+            // printf("%d\n", sizeH);
+        // }
+        rayX.angle += 0.25*M_PI/180;
+        rayY.angle += 0.25*M_PI/180;
+        wallX += 3;
     }
-
 }
 
 void player(t_data *data)
 {
-    data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bpp, &data->img.len, &data->img.endian);
-    char *pixel; 
-    int i = 0;
-    int y;
-    while (i< 5)
-    {
-        y= 0;
-        while (y<5)
-        {
-            pixel = data->img.addr + (y * data->img.len + i * (data->img.bpp / 8));
-            *(int*)pixel = 0xFFFFFF;
-            y++;
-        }
-        i++;
-    }
-    mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
-    cast_rays(data);
+    t_ray rayX;
+    t_ray rayY;
+    // mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
+    // draw_background(data, get_color(data->f), get_color(data->c));
+    cast_rays(data, rayX, rayY);
+
+    // draw_shape(data, 5, 5);
     // window_grid(data->mlx, data->win, data);
+}
+void    render_walls(t_data *data)
+{
+    t_ray rayX;
+    t_ray rayY;
+    // mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
+    cast_rays(data, rayX, rayY);
+    // draw_shape(data, 5,5);
 }
 
 int ched_ched(int num, t_data *data)
@@ -265,9 +293,10 @@ int ched_ched(int num, t_data *data)
     {
         data->sh.mov = 1;
         mlx_clear_window(data->mlx, data->win);
-        draw_map(data, data->mlx, data->win);
+        // draw_map(data, data->mlx, data->win);
         data->sh.x -= cos(data->sh.angle - (M_PI / 2)) * 2 * data->sh.mov;
         data->sh.y -= sin(data->sh.angle - (M_PI / 2)) * 2 * data->sh.mov;
+        draw_background(data, get_color(data->f), get_color(data->c));
         // printf("&&&%f\n", data->sh.angle);
         player(data);
         // newX = data->sh.x + cos(data->sh.angle) * 100;
@@ -278,9 +307,10 @@ int ched_ched(int num, t_data *data)
     {
         data->sh.mov = 1;
         mlx_clear_window(data->mlx, data->win);
-        draw_map(data, data->mlx, data->win);
+        // draw_map(data, data->mlx, data->win);
         data->sh.x -= cos(data->sh.angle) * 2 * data->sh.mov;
         data->sh.y -= sin(data->sh.angle) * 2 * data->sh.mov;
+    draw_background(data, get_color(data->f), get_color(data->c));
         // printf("&&&%f\n", data->sh.angle);
         player(data);
         // newX = data->sh.x + cos(data->sh.angle) * 100;
@@ -291,10 +321,11 @@ int ched_ched(int num, t_data *data)
     {
         data->sh.mov = 1;
         mlx_clear_window(data->mlx, data->win);
-        draw_map(data, data->mlx, data->win);
+        // draw_map(data, data->mlx, data->win);
         data->sh.x -= cos(data->sh.angle + (M_PI / 2)) * 2 * data->sh.mov;
         data->sh.y -= sin(data->sh.angle + (M_PI / 2)) * 2 * data->sh.mov;
         // printf("&&&%f\n", data->sh.angle);
+    draw_background(data, get_color(data->f), get_color(data->c));
         player(data);
         // newX = data->sh.x + cos(data->sh.angle) * 100;
         // newY = data->sh.y + sin(data->sh.angle) * 100;
@@ -304,10 +335,11 @@ int ched_ched(int num, t_data *data)
     {
         data->sh.mov = -1;
         mlx_clear_window(data->mlx, data->win);
-        draw_map(data, data->mlx, data->win);
+        // draw_map(data, data->mlx, data->win);
         data->sh.y += sin(data->sh.angle + (M_PI)) * 2 * data->sh.mov;
         data->sh.x += cos(data->sh.angle + (M_PI)) * 2 * data->sh.mov;
         // printf("&&&%f\n", data->sh.angle);
+    draw_background(data, get_color(data->f), get_color(data->c));
         player(data);
         // newX = data->sh.x + cos(data->sh.angle) * 100;
         // newY = data->sh.y + sin(data->sh.angle) * 100;
@@ -318,8 +350,9 @@ int ched_ched(int num, t_data *data)
         data->sh.rot = -1;
         data->sh.angle += 5 * (M_PI/180) * data->sh.rot * data->sh.mov;
         mlx_clear_window(data->mlx, data->win);
-        draw_map(data, data->mlx, data->win);
+        // draw_map(data, data->mlx, data->win);
         // printf("&&&%f\n", data->sh.angle);
+    draw_background(data, get_color(data->f), get_color(data->c));
         player(data);
         // newX = data->sh.x + cos(data->sh.angle) * 100;
         // newY = data->sh.y + sin(data->sh.angle) * 100;
@@ -330,13 +363,15 @@ int ched_ched(int num, t_data *data)
         data->sh.rot = +1;
         data->sh.angle += 5 * (M_PI/180) * data->sh.rot * data->sh.mov;
         mlx_clear_window(data->mlx, data->win);
-        draw_map(data, data->mlx, data->win);
+        // draw_map(data, data->mlx, data->win);
         // printf("&&&%f\n", data->sh.angle);
+    draw_background(data, get_color(data->f), get_color(data->c));
         player(data);
         // newX = data->sh.x + cos(data->sh.angle) * 100;
         // newY = data->sh.y + sin(data->sh.angle) * 100;
         // draw_line(data,  newX, newY, 0xFF0000);
     }
+    // printf("x=%d\ny=%d\n", data->sh.x, data->sh.y);
     return 0;
 }
 
@@ -346,48 +381,63 @@ int get_color(char *s)
     int color = 0;
     int i = 0;
     int c = 0;
+    int shifter = 23;
     while (i < 3)
     {
         int num = ft_atoi(clrs[i]);
         c = 0;
         while (c < 8)
         {
+            printf("(%d & 1<<%d)=%d\n", num, c, num & 1<<c);
             if ((num & 1<<c))
-            {
-                color += 1<<c;
-            }
+                color += 1<<shifter;
             c++;
-            color *= i*10;
+            shifter--;
         }
         i++;
-        printf("azeazeaze\n");
     }
     return (color);
 }
 
 void    draw_background(t_data *data, int floorColor, int ceilColor)
 {
+    // printf("f = %d\nc = %d\n", floorColor, ceilColor);
     // t_img *ceilling;
     // ceilling->img = mlx_new_image(data->mlx, 42*data->x_len, 42*data->y_len/2);
     t_img floor;
-    floor.img = mlx_new_image(data->mlx, 42*data->x_len, 42*data->y_len/2);
+    floor.img = mlx_new_image(data->mlx, SCREEN_W, SCREEN_H/2);
     floor.addr = mlx_get_data_addr(floor.img, &floor.bpp, &floor.len, &floor.endian);
     char *pixel;
     int x, y = 0;
-    while (y < 42*data->y_len/2)
+    while (y < SCREEN_H/2)
     {
         x = 0;
-        while (x < 42*data->x_len)
+        while (x < SCREEN_W)
         {
-            // printf("%d\n",x);
             pixel = floor.addr + (y * floor.len + x * (floor.bpp/8));
-            printf("--%d\n", floorColor);
             *(int*)pixel = floorColor;
             x++;
         }
         y++;
     }
     mlx_put_image_to_window(data->mlx, data->win, floor.img, 0, 0);
+    t_img ceiling;
+    ceiling.img = mlx_new_image(data->mlx, SCREEN_W, SCREEN_H/2);
+    ceiling.addr = mlx_get_data_addr(ceiling.img, &ceiling.bpp, &ceiling.len, &ceiling.endian);
+    y = 0;
+    while (y < SCREEN_H/2)
+    {
+        x = 0;
+        while (x < SCREEN_W)
+        {
+            pixel = ceiling.addr + (y * ceiling.len + x * (ceiling.bpp/8));
+
+            *(int*)pixel = ceilColor;
+            x++;
+        }
+        y++;
+    }
+    mlx_put_image_to_window(data->mlx, data->win, ceiling.img, 0, SCREEN_H/2);
 }
 
 int walo(t_data *data)
@@ -397,26 +447,27 @@ int walo(t_data *data)
 
 void    cub3d(t_data *data)
 {
-    printf("%d\n", 0x57bd9000);
-    printf("%x\n", 1472040960);
-    printf("%d\n", data->f);
+    // printf("%d\n", 0x57bd9000);
+    // printf("%x\n", 1472040960);
+    // printf("%d\n", data->f);
     data->sh.x = (data->x_len*42)/2;
     data->sh.y = (data->y_len*42)/2;
     data->sh.angle = M_PI / 2 + M_PI/10;
     data->sh.mov = 1;
     data->sh.rot = 1;
     data->mlx = mlx_init();
-    data->win = mlx_new_window(data->mlx, 42*data->x_len, 42*data->y_len, "kyub_map");
+    data->win = mlx_new_window(data->mlx, SCREEN_W, SCREEN_H, "kyub_map");
     draw_background(data, get_color(data->f), get_color(data->c));
     // void *win2 = mlx_new_window(data->mlx, 100, 100, "test");
-    // data->img.img = mlx_new_image(data->mlx, 5, 5);
+    data->img.img = mlx_new_image(data->mlx, 5, 5);
     // draw_map(data, data->mlx, data->win);
-    // player(data);
+    player(data);
+    render_walls(data);
     // window_grid(data->mlx, data->win, data);
     // draw_line(data, data->sh.x, data->sh.y + 100, 0xFF0000);
-    // mlx_do_key_autorepeaton(data->mlx);
+    mlx_do_key_autorepeaton(data->mlx);
     // mlx_loop_hook(data->mlx, walo, &data);
-    // mlx_hook(data->win,2, 1L>>0,ched_ched, data);
+    mlx_hook(data->win,2, 1L>>0,ched_ched, data);
     // mlx_hook(data->win,2, 1L>>0,rotate, data);
     /*Delete old player position with key release*/
     mlx_loop(data->mlx);
