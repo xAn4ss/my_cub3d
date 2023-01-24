@@ -120,19 +120,23 @@ int cast_coll_x(t_data *data, int moveX, int moveY, t_ray *ray)
     nextY = ray->y/42 * 42;
     if (moveY == 1)
         nextY += 42;
-    nextX = ray->x + (ray->y - nextY)/tan(data->sh.angle);
+    nextX = ray->x + (ray->y - nextY)/tan(ray->angle);
     double Dx,Dy = 0;
     nextY += 2*moveY;
-    while (nextX < 42*data->x_len && nextX > 0 && nextY < 42*data->y_len && data->map[(int)floor(nextY/42)][(int)floor(nextX/42)] != '1')
+    while (nextX < 42*data->x_len && nextX > 0 
+        && nextY < 42*data->y_len 
+            && data->map[(int)floor(nextY/42)][(int)floor(nextX/42)] != '1')
     {
         Dy = 42;
-        Dx = 42 / tan(data->sh.angle);
+        Dx = 42 / tan(ray->angle);
         nextX = nextX - (Dx * moveY);
         nextY = nextY + (Dy * moveY);
     }
+    nextY -= 2*moveY;
     ray->x = (int)nextX;
     ray->y = (int)nextY;
-    return (sqrt((((double)data->sh.x + nextX)*((double)data->sh.x + nextX)) + ((double)data->sh.y + nextY)*((double)data->sh.y + nextY)));
+
+    return (sqrt((((double)data->sh.x - nextX)*((double)data->sh.x - nextX)) + ((double)data->sh.y - nextY)*((double)data->sh.y - nextY)));
 }
 
 int cast_coll_y(t_data *data, int moveX, int moveY, t_ray *ray)
@@ -141,68 +145,88 @@ int cast_coll_y(t_data *data, int moveX, int moveY, t_ray *ray)
     nextX = ray->x/42 * 42;
     if (moveX == 1)
         nextX += 42;
-    nextY = ray->y + (ray->x - nextX)*tan(data->sh.angle);
+    nextY = ray->y + (ray->x - nextX)*tan(ray->angle);
     double Dx,Dy = 0;
     nextX += 2*moveX;
     while (nextX < 42*data->x_len && nextX >= 0 && nextY < 42*data->y_len && nextY >= 0 && data->map[(int)floor(nextY/42)][(int)floor(nextX/42)] != '1')
     {
        Dx = 42;
-       Dy = 42 * tan(data->sh.angle);
+       Dy = 42 * tan(ray->angle);
        nextX = nextX + (Dx * moveX);
        nextY = nextY - (Dy * moveX);
     }
+    nextX -= 2*moveX;
     ray->x = nextX;
     ray->y = nextY;
-    return (sqrt((((double)data->sh.x + nextX)*((double)data->sh.x + nextX)) + ((double)data->sh.y + nextY)*((double)data->sh.y + nextY)));
-    // return (sqrt(pow(nextX, 2)+pow(nextY, 2)));
+    return (sqrt((((double)data->sh.x - nextX)*((double)data->sh.x - nextX)) + ((double)data->sh.y - nextY)*((double)data->sh.y - nextY)));
 }
 
-void cast_ray(t_data * data)
+int cast_ray(t_data * data, t_ray rayX, t_ray rayY)
 {   
     int dist = 0;
     int moveX, moveY = 0;
-    if (data->sh.angle > M_PI/2 && data->sh.angle < M_PI * 3/2)
+    if(rayX.angle < 0)
+        rayX.angle = 2*M_PI + rayX.angle;
+    else if (rayX.angle > 2*M_PI)
+        rayX.angle = -2*M_PI + rayX.angle;
+    if(rayY.angle < 0)
+        rayY.angle = 2*M_PI + rayY.angle;
+    else if (rayY.angle > 2*M_PI)
+        rayY.angle = -2*M_PI + rayY.angle;
+    if (rayX.angle > M_PI/2 && rayX.angle < M_PI * 3/2)
         moveX = -1;
     else
         moveX = 1;
-    if (data->sh.angle > 0 && data->sh.angle < M_PI)
+    if (rayX.angle > 0 && rayX.angle < M_PI)
         moveY = -1;
     else
         moveY = 1;
-    if (data->sh.angle < 0)
-        data->sh.angle = 2*M_PI - 5*M_PI/180;
-    else if (data->sh.angle > 2*M_PI - 5*M_PI/180)
-        data->sh.angle = 0;
-    t_ray rayX;
-    t_ray rayY;
-    rayY.x = data->sh.x;
-    rayY.y = data->sh.y;
-    rayX.x = data->sh.x;
-    rayX.y = data->sh.y;
     rayX.dist = cast_coll_x(data, moveX, moveY, &rayX);
     rayY.dist = cast_coll_y(data, moveX, moveX, &rayY);
-    if (rayX.x <= -2147483648)
+    if (rayX.x <= 0)
         rayX.dist = 2147483647;
-    if (rayY.y <= -2147483648)
+    if (rayY.y <= 0)
         rayY.dist = 2147483647;
-    printf("(%d,%d)\n", rayX.x, rayX.y);
-    printf("(%d,%d)\n", rayY.x, rayY.y);
-    printf("x=%d\ny=%d\n", rayX.dist, rayY.dist);
     if (abs(rayX.dist) < abs(rayY.dist))
     {
         dist = rayX.dist;
+        // printf("%d(%d,%d)\n", dist, rayX.x, rayX.y);
         draw_line(data, rayX.x, rayX.y, moveX, moveY, 0xFF0000);
+        
     }
-    else
+    else if(abs(rayX.dist) > abs(rayY.dist))
     {
         dist = rayY.dist;
-        draw_line(data, rayY.x, rayY.y, moveX, moveY, 0x00F000);
+        // printf("%d(%d,%d)\n", dist, rayY.x, rayY.y);
+        draw_line(data, rayY.x, rayY.y, moveX, moveY, 0xFF0000);
     }
+    return (dist);
 }
 
 void cast_rays(t_data *data)
 {
-    cast_ray(data);
+    int moveX, moveY = 0;
+    t_ray rayX;
+    t_ray rayY;
+    if (data->sh.angle < 0)
+        data->sh.angle = 2*M_PI - 5*M_PI/180;
+    else if (data->sh.angle > 2*M_PI - 5*M_PI/180)
+        data->sh.angle = 0;
+    rayY.x = data->sh.x;
+    rayY.y = data->sh.y;
+    rayX.x = data->sh.x;
+    rayX.y = data->sh.y;
+    rayX.angle = data->sh.angle - (M_PI/6);
+    rayY.angle = data->sh.angle - (M_PI/6);
+    // printf("ray: %f\n", rayX.angle*180/M_PI);
+    // printf("ray: %f\n", rayY.angle*180/M_PI);
+    while (rayX.angle < data->sh.angle + (M_PI/6))
+    {
+        cast_ray(data, rayX, rayY);
+        // printf("%d(%d,%d)\n", dist, rayY.x, rayY.y);
+        rayX.angle += 1*M_PI/180;
+        rayY.angle += 1*M_PI/180;
+    }
 
 }
 
@@ -316,6 +340,56 @@ int ched_ched(int num, t_data *data)
     return 0;
 }
 
+int get_color(char *s)
+{
+    char **clrs = ft_split(s, ',');
+    int color = 0;
+    int i = 0;
+    int c = 0;
+    while (i < 3)
+    {
+        int num = ft_atoi(clrs[i]);
+        c = 0;
+        while (c < 8)
+        {
+            if ((num & 1<<c))
+            {
+                color += 1<<c;
+            }
+            c++;
+            color *= i*10;
+        }
+        i++;
+        printf("azeazeaze\n");
+    }
+    return (color);
+}
+
+void    draw_background(t_data *data, int floorColor, int ceilColor)
+{
+    // t_img *ceilling;
+    // ceilling->img = mlx_new_image(data->mlx, 42*data->x_len, 42*data->y_len/2);
+    t_img floor;
+    floor.img = mlx_new_image(data->mlx, 42*data->x_len, 42*data->y_len/2);
+    floor.addr = mlx_get_data_addr(floor.img, &floor.bpp, &floor.len, &floor.endian);
+    char *pixel;
+    int x, y = 0;
+    while (y < 42*data->y_len/2)
+    {
+        x = 0;
+        while (x < 42*data->x_len)
+        {
+            // printf("%d\n",x);
+            pixel = floor.addr + (y * floor.len + x * (floor.bpp/8));
+            printf("--%d\n", floorColor);
+            *(int*)pixel = floorColor;
+            x++;
+        }
+        y++;
+    }
+    mlx_put_image_to_window(data->mlx, data->win, floor.img, 0, 0);
+}
+
 int walo(t_data *data)
 {
     return 0;
@@ -323,6 +397,9 @@ int walo(t_data *data)
 
 void    cub3d(t_data *data)
 {
+    printf("%d\n", 0x57bd9000);
+    printf("%x\n", 1472040960);
+    printf("%d\n", data->f);
     data->sh.x = (data->x_len*42)/2;
     data->sh.y = (data->y_len*42)/2;
     data->sh.angle = M_PI / 2 + M_PI/10;
@@ -330,15 +407,16 @@ void    cub3d(t_data *data)
     data->sh.rot = 1;
     data->mlx = mlx_init();
     data->win = mlx_new_window(data->mlx, 42*data->x_len, 42*data->y_len, "kyub_map");
+    draw_background(data, get_color(data->f), get_color(data->c));
     // void *win2 = mlx_new_window(data->mlx, 100, 100, "test");
-    data->img.img = mlx_new_image(data->mlx, 5, 5);
-    draw_map(data, data->mlx, data->win);
-    player(data);
+    // data->img.img = mlx_new_image(data->mlx, 5, 5);
+    // draw_map(data, data->mlx, data->win);
+    // player(data);
     // window_grid(data->mlx, data->win, data);
     // draw_line(data, data->sh.x, data->sh.y + 100, 0xFF0000);
-    mlx_do_key_autorepeaton(data->mlx);
+    // mlx_do_key_autorepeaton(data->mlx);
     // mlx_loop_hook(data->mlx, walo, &data);
-    mlx_hook(data->win,2, 1L>>0,ched_ched, data);
+    // mlx_hook(data->win,2, 1L>>0,ched_ched, data);
     // mlx_hook(data->win,2, 1L>>0,rotate, data);
     /*Delete old player position with key release*/
     mlx_loop(data->mlx);
