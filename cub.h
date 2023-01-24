@@ -44,6 +44,9 @@ typedef struct s_ray{
 	int x;
 	int y;
 	int dist;
+	double angle;
+	int moveX;
+	int moveY;
 } t_ray;
 
 typedef struct s_data {
