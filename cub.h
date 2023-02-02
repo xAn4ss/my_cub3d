@@ -79,6 +79,8 @@ void	init_struct(t_data *data);
 void	skip_spaces(char *str, int *i);
 char	*car_join(char *s1, char c);
 void	print_data(t_data *data);
+void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall);
+
 
 void    cub3d(t_data *data);
 
