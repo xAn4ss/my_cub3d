@@ -236,16 +236,16 @@ void cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
         // printf("hadi 3adi d N_S\n");
         // printf(">>x=%f\n>>y=%f\n", rayX.dist, rayY.dist);
         // printf("x(%d,%d)\ny(%d,%d)\n", rayX.x, rayX.y, rayY.x, rayY.y);
-        draw_line(data, rayX.x, rayX.y, moveX, moveY, 0x0000FF);
-        // draw_wall_N_S(data, rayX, wallX);
+        // draw_line(data, rayX.x, rayX.y, moveX, moveY, 0x0000FF);
+        draw_wall_N_S(data, rayX, wallX);
     }
     else if (rayX.dist > rayY.dist)
     {
         // printf("hadi 3adi d W_E\n");
         // printf(">>x=%f\n>>y=%f\n", rayX.dist, rayY.dist);
         // printf("x(%d,%d)\ny(%d,%d)\n", rayX.x, rayX.y, rayY.x, rayY.y);
-        // draw_wall_W_E(data, rayY, wallX);
-        draw_line(data, rayY.x, rayY.y, moveX, moveY, 0xFF0000);
+        draw_wall_W_E(data, rayY, wallX);
+        // draw_line(data, rayY.x, rayY.y, moveX, moveY, 0xFF0000);
     }
 }
 
@@ -291,7 +291,7 @@ void process_game(t_data *data, t_ray rayX, t_ray rayY)
         rayY.angle += 0.25 * M_PI / 180;
         wallX += 3;
     }
-    // mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
+    mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 }
 
 void cast_rays(t_data *data, t_ray rayX, t_ray rayY)
@@ -336,17 +336,18 @@ int ched_ched(int num, t_data *data)
     printf("%d__\n", num);
     if (num == 65307)
         exit(1);
-    if (num == 113 && data->map && data->map[(data->sh.y) / 42][(data->sh.x) / 42] != '1')
+    if (num == 113 && data->map && data->map[(int)(data->sh.y - round(sin(-data->sh.angle + (M_PI / 2))) * 2) / 42][(int)(data->sh.x-round(cos(-data->sh.angle + (M_PI / 2))) * 2) / 42] != '1')
     {
         data->sh.mov = 1;
         mlx_clear_window(data->mlx, data->win);
-        data->sh.x -= round(cos(-data->sh.angle + (M_PI / 2))) * 2 * data->sh.mov;
-        data->sh.y -= round(sin(-data->sh.angle + (M_PI / 2))) * 2 * data->sh.mov;
+        data->sh.x -= round(cos(-data->sh.angle - (M_PI / 2))) * 2 * data->sh.mov;
+        data->sh.y -= round(sin(-data->sh.angle - (M_PI / 2))) * 2 * data->sh.mov;
         // render_walls(data);
         // draw_map(data);
         // player(data);
     }
-    else if (num == 122 && data->map[(int)floor((data->sh.y) / 42)][(int)floor((data->sh.x) / 42)] != '1')
+    else if (num == 122 && 
+        data->map[(int)floor((data->sh.y+round(sin(-data->sh.angle))*2)/42)][(int)floor((data->sh.x+round(cos(-data->sh.angle))*2) / 42)] != '1')
     {
         data->sh.mov = 1;
         // data->sh.x++;
@@ -357,17 +358,17 @@ int ched_ched(int num, t_data *data)
         // player(data); 
         // render_walls(data);
     }
-    else if (num == 100 && data->map[(data->sh.y) / 42][(data->sh.x) / 42] != '1')
+    else if (num == 100 && data->map[(int)(data->sh.y-round(sin(-data->sh.angle - (M_PI / 2)))) / 42][(int)(data->sh.x-round(cos(-data->sh.angle - (M_PI / 2)))) / 42] != '1')
     {
         data->sh.mov = 1;
         mlx_clear_window(data->mlx, data->win);
-        data->sh.x -= round(cos(-data->sh.angle - (M_PI / 2))) * 2 * data->sh.mov;
-        data->sh.y -= round(sin(-data->sh.angle - (M_PI / 2))) * 2 * data->sh.mov;
+        data->sh.x -= round(cos(-data->sh.angle + (M_PI / 2))) * 2 * data->sh.mov;
+        data->sh.y -= round(sin(-data->sh.angle + (M_PI / 2))) * 2 * data->sh.mov;
         // draw_map(data);
         // player(data); 
         // render_walls(data);
     }
-    else if (num == 115 && data->map[(data->sh.y) / 42][(data->sh.x) / 42] != '1')
+    else if (num == 115 && data->map[(int)(data->sh.y + round(sin(-data->sh.angle + M_PI)) * 2) / 42][(int)(data->sh.x + round(cos(-data->sh.angle + M_PI)) * 2) / 42] != '1')
     {
         data->sh.mov = -1;
         mlx_clear_window(data->mlx, data->win);
@@ -377,7 +378,7 @@ int ched_ched(int num, t_data *data)
         // player(data); 
         // render_walls(data);
     }
-    else if (num == 65363)
+    else if (num == 65361)
     {
         data->sh.rot = -1;
         data->sh.angle += 5 * (M_PI / 180) * data->sh.rot;
@@ -386,7 +387,7 @@ int ched_ched(int num, t_data *data)
         // player(data);
         // render_walls(data);
     }
-    else if (num == 65361)
+    else if (num == 65363)
     {
         data->sh.rot = 1;
         data->sh.angle += 5 * (M_PI / 180) * data->sh.rot;
@@ -395,9 +396,9 @@ int ched_ched(int num, t_data *data)
         // player(data);
         // render_walls(data);
     }        
-        // render_walls(data);
-        draw_map(data);
-        player(data);
+        render_walls(data);
+        // draw_map(data);
+        // player(data);
         // printf(">>>%f\n", data->sh.angle);
     return 0;
 }
@@ -479,10 +480,10 @@ void cub3d(t_data *data)
     data->mlx = mlx_init();
     data->win = mlx_new_window(data->mlx, SCREEN_W, SCREEN_H, "kyub_map");
     data->img.img = mlx_new_image(data->mlx, SCREEN_W, SCREEN_H);
-    // data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bpp, &data->img.len, &data->img.endian);
-    // render_walls(data);
-    draw_map(data);
-    player(data);
+    data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bpp, &data->img.len, &data->img.endian);
+    render_walls(data);
+    // draw_map(data);
+    // player(data);
     // printf("%s\n", data->no);
     // exit(0);
     mlx_do_key_autorepeaton(data->mlx);
