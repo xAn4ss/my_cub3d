@@ -267,7 +267,7 @@ void process_game(t_data *data, t_ray rayX, t_ray rayY)
     rayX.y = (double)data->sh.y;
     rayX.angle = data->sh.angle - (M_PI / 6);
     rayY.angle = data->sh.angle - (M_PI / 6);
-    while (rayX.angle < data->sh.angle + (M_PI / 6))
+    while (rayX.angle < data->sh.angle + (M_PI / 6) && wallX < SCREEN_W)
     {
         cast_ray(data, wallX, rayX, rayY);
         rayX.angle += 0.25 * M_PI / 180;
