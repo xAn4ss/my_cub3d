@@ -111,7 +111,7 @@ double cast_coll_x(t_data *data, int moveX, int moveY, t_ray *ray)
     nextX = ray->x + (ray->y - nextY) / tan(ray->angle);
     double Dx, Dy = 0;
     nextY += 2 * moveY;
-    while (nextX < 42 * data->x_len && nextX > 0 && nextY < 42 * data->y_len && data->map[(int)floor(nextY / 42)][(int)floor(nextX / 42)] != '1')
+    while (nextX < 42*data->x_len && nextX > 0 && nextY < 42*data->y_len && nextY > 0 && data->map[(int)floor(nextY / 42)][(int)floor(nextX / 42)] != '1')
     {
         Dy = 42;
         Dx = 42 / tan(ray->angle);
@@ -126,6 +126,7 @@ double cast_coll_x(t_data *data, int moveX, int moveY, t_ray *ray)
 
 double cast_coll_y(t_data *data, int moveX, int moveY, t_ray *ray)
 {
+
     double nextX, nextY = 0;
     nextX = ray->x / 42 * 42;
     if (moveX == 1)
@@ -133,7 +134,7 @@ double cast_coll_y(t_data *data, int moveX, int moveY, t_ray *ray)
     nextY = ray->y + (ray->x - nextX) * tan(ray->angle);
     double Dx, Dy = 0;
     nextX += 2 * moveX;
-    while (nextX < 42 * data->x_len && nextX > 0 && nextY < 42 * data->y_len && nextY > 0 && data->map[(int)floor(nextY / 42)][(int)floor(nextX / 42)] != '1')
+    while (nextX < 42*data->x_len && nextX > 0 && nextY < 42*data->y_len && nextY > 0 && data->map[(int)floor(nextY / 42)][(int)floor(nextX / 42)] != '1')
     {
         Dx = 42;
         Dy = 42 * tan(ray->angle);
@@ -146,18 +147,6 @@ double cast_coll_y(t_data *data, int moveX, int moveY, t_ray *ray)
     return (sqrt((((double)data->sh.x - nextX) * ((double)data->sh.x - nextX)) + ((double)data->sh.y - nextY) * ((double)data->sh.y - nextY)));
 }
 
-// void *get_image(t_data * data, char *image)
-// {
-//     int x = 0;
-
-//     void *img = mlx_xpm_file_to_image(data->mlx, image, &x, &x);
-//     if (!img)
-//     {
-//         printf("%s not found -_-\n", image+2);
-//         exit(EXIT_FAILURE);
-//     }
-//     return (img);
-// }
 void draw_wall_N_S(t_data *data, t_ray ray, int wallX)
 {
     int x = 1;
@@ -166,12 +155,12 @@ void draw_wall_N_S(t_data *data, t_ray ray, int wallX)
         NO_SO.img = mlx_xpm_file_to_image(data->mlx, data->no, &x, &x);
     else
         NO_SO.img = mlx_xpm_file_to_image(data->mlx, data->so, &x, &x);
-    int sizeH = (SCREEN_H / (float)ray.dist) * 70;
+    int sizeH = (SCREEN_H / ray.dist) * 70;
     sizeH *= 1 / cosf(ray.angle - data->sh.angle);
     if (sizeH > 0)
     {
-        if (sizeH > SCREEN_H)
-            sizeH = SCREEN_H;
+        // if (sizeH >= 500)
+        //     sizeH = 500;
         draw_shape(data, sizeH, wallX, ray.x, NO_SO);
     }
 }
@@ -184,12 +173,12 @@ void draw_wall_W_E(t_data *data, t_ray ray, int wallX)
         W_E.img = mlx_xpm_file_to_image(data->mlx, data->we, &x, &x);
     else
         W_E.img = mlx_xpm_file_to_image(data->mlx, data->ea, &x, &x);
-    int sizeH = (SCREEN_H / (float)ray.dist) * 70;
+    int sizeH = (SCREEN_H / ray.dist) * 70;
     sizeH *= 1 / cosf(ray.angle - data->sh.angle);
     if (sizeH > 0)
     {
-        if (sizeH > SCREEN_H)
-            sizeH = SCREEN_H;
+        // if (sizeH >= 500)
+        //     sizeH = 500;
         draw_shape(data, sizeH, wallX, ray.y, W_E);
     }
 }
@@ -222,30 +211,21 @@ void cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
         rayX.dist = 2147483647;
     if (rayY.y <= 0)
         rayY.dist = 2147483647;
-    if (rayX.dist == rayY.dist)
-    {
-        // if ((rayX.y%42) == 0)
-        printf("******************************************n");
-        printf(">>x=%f\n>>y=%f\n", rayX.dist, rayY.dist);
-        printf("x(%d,%d)\ny(%d,%d)\n", rayX.x, rayX.y, rayY.x, rayY.y);
-        draw_line(data, rayX.x, rayX.y, moveX, moveY, 0x0000FF);
-        printf("*************************************\n");
-    }
+    // if (rayX.dist == rayY.dist)
+    // {
+    //     // if ((rayX.y%42) == 0)
+    //     printf("******************************************n");
+    //     printf(">>x=%f\n>>y=%f\n", rayX.dist, rayY.dist);
+    //     printf("x(%d,%d)\ny(%d,%d)\n", rayX.x, rayX.y, rayY.x, rayY.y);
+    //     printf("*************************************\n");
+    // }
     if (rayX.dist < rayY.dist)
     {
-        // printf("hadi 3adi d N_S\n");
-        // printf(">>x=%f\n>>y=%f\n", rayX.dist, rayY.dist);
-        // printf("x(%d,%d)\ny(%d,%d)\n", rayX.x, rayX.y, rayY.x, rayY.y);
-        // draw_line(data, rayX.x, rayX.y, moveX, moveY, 0x0000FF);
         draw_wall_N_S(data, rayX, wallX);
     }
     else if (rayX.dist > rayY.dist)
     {
-        // printf("hadi 3adi d W_E\n");
-        // printf(">>x=%f\n>>y=%f\n", rayX.dist, rayY.dist);
-        // printf("x(%d,%d)\ny(%d,%d)\n", rayX.x, rayX.y, rayY.x, rayY.y);
         draw_wall_W_E(data, rayY, wallX);
-        // draw_line(data, rayY.x, rayY.y, moveX, moveY, 0xFF0000);
     }
 }
 
@@ -265,8 +245,11 @@ void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall)
         py = y;
         while (j < height)
         {
-            ft_memcpy(data->img.addr + (py * data->img.len + px * (data->img.bpp / 8)),
+            if (py >= 0 && py < SCREEN_H)
+            {
+                ft_memcpy(data->img.addr + (py * data->img.len + px * (data->img.bpp / 8)),
                       wall.addr + ((j*42/height) * wall.len + (pixelX % 42) * (wall.bpp / 8)), 3);
+            }
             py++;
             j++;
         }
@@ -310,9 +293,6 @@ void player(t_data *data)
 {
     t_ray rayX;
     t_ray rayY;
-    // mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
-    // draw_background(data, get_color(data->f), get_color(data->c));
-    // draw_shape(data, 5, 5, data->sh.x, data->sh.y);
     cast_rays(data, rayX, rayY);
 
     // window_grid(data->mlx, data->win, data);
@@ -321,10 +301,9 @@ void render_walls(t_data *data)
 {
     t_ray rayX;
     t_ray rayY;
-    // mlx_put_image_to_window(data->mlx, data->win, data->img.img, data->sh.x, data->sh.y);
     draw_background(data, get_color(data->f), get_color(data->c));
     cast_rays(data, rayX, rayY);
-    // draw_shape(data, 5,5);
+
 }
 
 int ched_ched(int num, t_data *data)
@@ -370,10 +349,10 @@ int ched_ched(int num, t_data *data)
     }
     else if (num == 115 && data->map[(int)(data->sh.y + round(sin(-data->sh.angle + M_PI)) * 2) / 42][(int)(data->sh.x + round(cos(-data->sh.angle + M_PI)) * 2) / 42] != '1')
     {
-        data->sh.mov = -1;
+        // data->sh.mov = -1;
         mlx_clear_window(data->mlx, data->win);
-        data->sh.x -= round(cos(-data->sh.angle + M_PI)) * 2 * data->sh.mov;
-        data->sh.y -= round(sin(-data->sh.angle + M_PI)) * 2 * data->sh.mov;
+        data->sh.x += round(cos(-data->sh.angle + M_PI)) * 2;
+        data->sh.y += round(sin(-data->sh.angle + M_PI)) * 2;
         // draw_map(data);
         // player(data); 
         // render_walls(data);
@@ -465,6 +444,78 @@ void check_text_files(t_data *data)
         printf("Test file not found-_-\n");
         exit(EXIT_FAILURE);
     }
+
+}
+int pressed_key(int num, t_data *data)
+{
+    if (num == 113)
+        data->sh.movX = -1;
+    else if (num == 122)
+        data->sh.movY = -1;
+    else if (num == 100)
+        data->sh.movX = 1;
+    else if (num == 115)
+        data->sh.movY = 1;
+    else if (num == 65361)
+        data->sh.rot = -1;
+    else if (num == 65363)
+        data->sh.rot = 1;
+    return 0;
+}
+
+int release_key(int num, t_data *data)
+{
+    if (num == 113)
+        data->sh.movX = 0;
+    else if (num == 122)
+        data->sh.movY = 0;
+    else if (num == 100)
+        data->sh.movX = 0;
+    else if (num == 115)
+        data->sh.movY = 0;
+    else if (num == 65361)
+        data->sh.rot = 0;
+    else if (num == 65363)
+        data->sh.rot = 0;
+    return 0;
+}
+
+int update(t_data *data)
+{
+    if (data->i < 2000)
+	{
+		data->i++;
+		return 1;
+	}
+	else if (data->i == 2000)
+		data->i = 0;
+    if (data->sh.movX == -1)
+    {
+        data->sh.x -= round(cos(-data->sh.angle - (M_PI / 2))) * 2;
+        data->sh.y -= round(sin(-data->sh.angle - (M_PI / 2))) * 2;
+    }
+    if (data->sh.movY == -1)
+    {
+        data->sh.x += round(cos(-data->sh.angle)) * 2;
+        data->sh.y += round(sin(-data->sh.angle)) * 2;
+    }
+    if (data->sh.movX == 1)
+    {
+        data->sh.x -= round(cos(-data->sh.angle + (M_PI / 2))) * 2;
+        data->sh.y -= round(sin(-data->sh.angle + (M_PI / 2))) * 2;   
+    }
+    if (data->sh.movY == 1)
+    {
+        data->sh.x += round(cos(-data->sh.angle + M_PI)) * 2;
+        data->sh.y += round(sin(-data->sh.angle + M_PI)) * 2; 
+    }
+    if (data->sh.rot)
+        data->sh.angle += 5 * (M_PI / 180) * data->sh.rot;
+    mlx_clear_window(data->mlx, data->win);
+    render_walls(data);
+    data->i++;
+    return 1;
+
 }
 
 void cub3d(t_data *data)
@@ -473,9 +524,12 @@ void cub3d(t_data *data)
     int x = 42;
     data->sh.x = (SCREEN_W) / 2;
     data->sh.y = (SCREEN_H) / 2;
-    data->sh.angle = M_PI/2;
-    data->sh.mov = 1;
-    data->sh.rot = 1;
+    data->sh.angle = 0;
+    data->sh.mov = 0;
+    data->sh.movX = 0;
+    data->sh.movY = 0;
+    data->sh.rot = 0;
+    data->i = 0;
     check_text_files(data);
     data->mlx = mlx_init();
     data->win = mlx_new_window(data->mlx, SCREEN_W, SCREEN_H, "kyub_map");
@@ -485,9 +539,13 @@ void cub3d(t_data *data)
     // draw_map(data);
     // player(data);
     // printf("%s\n", data->no);
-    // exit(0);
-    mlx_do_key_autorepeaton(data->mlx);
-    mlx_hook(data->win, 2, 1L >> 0, ched_ched, data);
+    // exit(0);azeaz
+    // mlx_do_key_autorepeaton(data->mlx);
+    // mlx_hook(data->win, 2, 1L >> 0, ched_ched, data);
+    mlx_hook(data->win, 2, 1L<<0, ched_ched, data);
+    // mlx_hook(data->win, 2, 1L<<0, pressed_key, data);
+    // mlx_hook(data->win, 3, 1L<<1, release_key, data);
+    // mlx_loop_hook(data->mlx, update, data);
     /*Delete old player position with key release*/
     mlx_loop(data->mlx);
 }
