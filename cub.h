@@ -24,7 +24,7 @@
 // #include <X11/keysym.h>
 #define SCREEN_W 720
 #define SCREEN_H 480
-typedef struct s_sh {
+typedef struct s_player {
 	int x;
 	int y;
 	double angle;
@@ -33,7 +33,12 @@ typedef struct s_sh {
 	int movY;
 	int mov;
 }	t_sh;
-
+typedef struct s_spos {
+	int	n;
+	int	s;
+	int	w;
+	int	e;
+}	t_spos;
 typedef struct s_img{
 	void *img;
 	char *addr;
@@ -74,6 +79,7 @@ typedef struct s_data {
 	t_img	img;
 	t_sh 	sh;
 	t_txt	txtr;
+	t_spos		spos;
 	int i;
 }	t_data;
 
@@ -90,8 +96,11 @@ void	skip_spaces(char *str, int *i);
 char	*car_join(char *s1, char c);
 void	print_data(t_data *data);
 void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall);
+int	wals_check(t_data *data);
+int check_colors(t_data *data);
+int	map_checker(t_data *data);
 
-
+int check_c_f(t_data *data);
 void    cub3d(t_data data);
 
 #endif

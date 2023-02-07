@@ -16,6 +16,7 @@
 # include<stdlib.h>
 # include<fcntl.h>
 # include<unistd.h>
+#include"libft.h"
 # define BUFFER_SIZE 10
 
 size_t	ft_strlen(const char *s);
@@ -28,4 +29,5 @@ char	*gett(int fd, char *str);
 char	*getl(char *str);
 char	*new_str(char *str);
 char	*get_next_line(int fd);
+
 #endif

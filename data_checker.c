@@ -6,16 +6,16 @@
 /*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:22:01 by ybachaki          #+#    #+#             */
-/*   Updated: 2022/12/26 00:11:57 by ybachaki         ###   ########.fr       */
+/*   Updated: 2023/01/22 02:45:55 by ybachaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
 
-int	check_line(char **line, int x)
+int check_line(char **line, int x)
 {
-	int		i;
-	char	*new;
+	int i;
+	char *new;
 
 	i = 0;
 	new = NULL;
@@ -24,15 +24,15 @@ int	check_line(char **line, int x)
 	if (line[0][i] == '\n' || line[0][i] == '\0')
 		return (0);
 	new = strdup(*line + i);
-	free (*line);
+	free(*line);
 	*line = new;
 	return (1);
 }
 
-char	*add_after_split(char *str, int i)
+char *add_after_split(char *str, int i)
 {
-	int		n_spaces;
-	char	*temp;
+	int n_spaces;
+	char *temp;
 
 	n_spaces = 0;
 	temp = NULL;
@@ -51,73 +51,114 @@ char	*add_after_split(char *str, int i)
 	if (n_spaces != 1)
 		return (NULL);
 	return (temp);
-
 }
-void	add_to_struct(t_data *data, char **tab)
+
+void add_to_struct(t_data *data, char **tab)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	while(tab[i])
+	while (tab[i])
 	{
-		if (strncmp("NO ", tab[i], 3) == 0)
+		if (strncmp("NO ", tab[i], 3) == 0 || strncmp("NO\t", tab[i], 3) == 0)
 			data->no = add_after_split(tab[i], 2);
-		else if (strncmp("SO ", tab[i], 3) == 0)
+		else if (strncmp("SO ", tab[i], 3) == 0 || strncmp("SO\t", tab[i], 3) == 0)
 			data->so = add_after_split(tab[i], 2);
-		else if (strncmp("WE ", tab[i], 3) == 0)
+		else if (strncmp("WE ", tab[i], 3) == 0 || strncmp("WE\t", tab[i], 3) == 0)
 			data->we = add_after_split(tab[i], 2);
-		else if (strncmp("EA ", tab[i], 3) == 0)
+		else if (strncmp("EA ", tab[i], 3) == 0 || strncmp("EA\t", tab[i], 3) == 0)
 			data->ea = add_after_split(tab[i], 2);
-		else if (strncmp("F ", tab[i], 1) == 0)
+		else if (strncmp("F ", tab[i], 1) == 0 || strncmp("F\t", tab[i], 1) == 0)
 			data->f = add_after_split(tab[i], 1);
-		else if (strncmp("C ", tab[i], 1) == 0)
+		else if (strncmp("C ", tab[i], 1) == 0 || strncmp("C\t", tab[i], 1) == 0)
 			data->c = add_after_split(tab[i], 1);
 		i++;
 	}
-	// must free **tab
+	// must free **tab , use strdup
 }
 
-int	check_c_f(t_data *data)
+int check_c_f(t_data *data)
 {
-	char	**temp;
-	int		i;
-	int		j;
+	char **temp;
+	int i;
+	int j;
 
 	i = 0;
 	j = 0;
-	temp =NULL;
+	if (!check_colors(data))
+		return 0;
+	temp = NULL;
 	temp = ft_split(data->c, ',');
 	while (j < 2)
 	{
-		if (ft_len(temp) != 3)
-			return (0);
-		else
-			while (temp && temp[i])
-			{
-				if (ft_atoi(temp[i]) > 255 || ft_atoi(temp[i]) < 0)
-					return (0);
-				i++;
-			}
+		while (temp && temp[i])
+		{
+			if (ft_atoi(temp[i]) > 255 || ft_atoi(temp[i]) < 0)
+				return (0);
+			i++;
+		}
+
 		j++;
 		i = 0;
 		temp = ft_split(data->f, ',');
 	}
+
 	return (1);
 }
 
-int	check_data(t_data *data)
+int check_colors(t_data *data)
 {
-	if (!data || !data->c || !data->ea || !data->f
-	|| !data->no || !data->so || !data->we || !check_c_f(data) || !data->map
-	|| !data->x_len || !data->y_len)
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (j < 3 && data->c[i])
+	{
+		if (data->c[i] == ',')
+		{
+			j++;
+			i++;
+			continue;
+		}
+		if (!ft_isdigit(data->c[i]))
+			return 0;
+		i++;
+	}
+	if (data->c[i] || j != 2)
+		return 0;
+	i = 0;
+	j = 0;
+	while (j < 3 && data->f[i])
+	{
+		if (data->f[i] == ',')
+		{
+			j++;
+			i++;
+			continue;
+		}
+		if (!ft_isdigit(data->f[i]))
+			return 0;
+		i++;
+	}
+	if (data->f[i] || j != 2)
+		return 0;
+
+	return 1;
+}
+
+int check_data(t_data *data)
+{
+	if (!data || !data->c || !data->ea || !data->f || !data->no || !data->so ||
+	!data->we || !check_c_f(data) || !data->map || !data->x_len || !data->y_len)
 		return (0);
 	return (1);
 }
 
-int	map_reader(t_data *data, int fd)
+int map_reader(t_data *data, int fd)
 {
-	int		i;
-	char	*line;
+	int i;
+	char *line;
 
 	i = 0;
 	line = NULL;
@@ -125,7 +166,7 @@ int	map_reader(t_data *data, int fd)
 	while (line && !check_line(&line, 0))
 		line = get_next_line(fd);
 
-	while(line && line[0] != '\n')
+	while (line && line[0] != '\n')
 	{
 		i++;
 		if (ft_strlen(line) - 1 > data->x_len)
@@ -139,11 +180,11 @@ int	map_reader(t_data *data, int fd)
 	return (1);
 }
 
-int	check_file_content(int fd, t_data *data)
+int check_file_content(int fd, t_data *data)
 {
-	char 	*line;
-	char	**tab;
-	int		i;
+	char *line;
+	char **tab;
+	int i;
 
 	i = 0;
 	tab = NULL;
@@ -151,25 +192,29 @@ int	check_file_content(int fd, t_data *data)
 	line = get_next_line(fd);
 	while (line && ft_len(tab) < 6)
 	{
-		if (check_line(&line, 1) && isalpha(line[0]))
+		if (check_line(&line, 1))
 			tab = add(line, tab);
 		else
 			free(line);
 		if (ft_len(tab) < 6)
 			line = get_next_line(fd);
 	}
+
 	if (ft_len(tab) != 6)
 	{
 		// free
 		return (0);
 	}
+
 	add_to_struct(data, tab);
-	
+
 	if (!map_reader(data, fd))
 		return (0);
-	
-	if (!check_data(data))
-		return(0);
 
+	if (!check_data(data))
+		return (0);
+	if (!map_checker(data))
+		return (0);
+	// must close fd
 	return (1);
 }

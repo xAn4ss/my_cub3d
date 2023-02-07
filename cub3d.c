@@ -217,10 +217,13 @@ void cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
         rayY.dist = 2147483647;
     if (rayX.dist < rayY.dist)
     {
+    // draw_map(data);
         draw_wall_N_S(data, rayX, wallX);
+        // draw_line(data, rayX.x, rayX.y, moveX, moveY, 0xFF0000);
     }
     else if (rayX.dist > rayY.dist)
     {
+        // draw_line(data, rayY.x, rayY.y, moveX, moveY, 0xFF0000);
         draw_wall_W_E(data, rayY, wallX);
     }
 }
@@ -262,13 +265,15 @@ void process_game(t_data *data, t_ray rayX, t_ray rayY)
     rayX.y = (double)data->sh.y;
     rayX.angle = data->sh.angle - (M_PI / 6);
     rayY.angle = data->sh.angle - (M_PI / 6);
-    while (rayX.angle < data->sh.angle + (M_PI / 6) && wallX < SCREEN_W)
+    wallX = SCREEN_W;
+    while (rayX.angle < data->sh.angle + (M_PI / 6) && wallX > 0)
     {
+        wallX -= 3;
         cast_ray(data, wallX, rayX, rayY);
         rayX.angle += 0.25 * M_PI / 180;
         rayY.angle += 0.25 * M_PI / 180;
-        wallX += 3;
     }
+        // printf("-->%d\n", wallX);
     mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 }
 
@@ -384,19 +389,28 @@ int get_color(char *s)
     int i = 0;
     int c = 0;
     int shifter = 23;
+    int p = 2;
     while (i < 3)
     {
-        int num = ft_atoi(clrs[i]);
-        c = 0;
-        while (c < 8)
-        {
-            if ((num & 1 << c))
-                color += 1 << shifter;
-            c++;
-            shifter--;
-        }
+        color += ft_atoi(clrs[i]) * pow(256, p);
+        p--;
         i++;
     }
+    // while (i < 3)
+    // {
+    //     int num = ft_atoi(clrs[i]);
+    //     c = 0;
+    //     while (c < 8)
+    //     {
+    //         if ((num & 1 << c))
+    //             color += 1 << shifter;
+    //         printf("%d & 1 << %d = %d\n", num, c, (num & 1 << c));
+    //         printf("..%d\n", color);
+    //         c++;
+    //         shifter--;
+    //     }
+    //     i++;
+    // }
     return (color);
 }
 
@@ -410,7 +424,7 @@ void draw_background(t_data *data, int floorColor, int ceilColor)
         while (x < SCREEN_W)
         {
             pixel = data->img.addr + (y * data->img.len + x * (data->img.bpp / 8));
-            *(int *)pixel = floorColor;
+            *(int *)pixel = ceilColor;
             x++;
         }
         y++;
@@ -422,7 +436,7 @@ void draw_background(t_data *data, int floorColor, int ceilColor)
         while (x < SCREEN_W)
         {
             pixel = data->img.addr + (y * data->img.len + x * (data->img.bpp / 8));
-            *(int *)pixel = ceilColor;
+            *(int *)pixel = floorColor;
             x++;
         }
         y++;
@@ -431,6 +445,9 @@ void draw_background(t_data *data, int floorColor, int ceilColor)
 
 int pressed_key(int num, t_data *data)
 {
+    if (num == 65307)
+        exit(0);
+        // free
     if (num == 113)
         data->sh.movX = -1;
     else if (num == 122)
@@ -472,38 +489,44 @@ int update(t_data *data)
 	}
 	else if (data->i == 2000)
 		data->i = 0;
-    if (data->sh.movX == -1)
+    if (data->sh.movX == -1 && 
+    data->map[(int)(data->sh.y + round(sin(-data->sh.angle - (M_PI / 2))) * 5) / 42][(int)(data->sh.x+round(cos(-data->sh.angle - (M_PI / 2))) * 5) / 42] != '1')
     {
-        data->sh.x -= round(cos(-data->sh.angle - (M_PI / 2))) * 2;
-        data->sh.y -= round(sin(-data->sh.angle - (M_PI / 2))) * 2;
+        data->sh.x += round(cos(-data->sh.angle - (M_PI / 2)));
+        data->sh.y += round(sin(-data->sh.angle - (M_PI / 2)));
     }
-    if (data->sh.movY == -1)
+    if (data->sh.movY == -1 && 
+    data->map[(int)(data->sh.y + round(sin(-data->sh.angle)) * 5) / 42][(int)(data->sh.x+round(cos(-data->sh.angle)) * 5) / 42] != '1')
     {
         data->sh.x += round(cos(-data->sh.angle)) * 2;
         data->sh.y += round(sin(-data->sh.angle)) * 2;
     }
-    if (data->sh.movX == 1)
+    if (data->sh.movX == 1 && 
+    data->map[(int)(data->sh.y - round(sin(-data->sh.angle - (M_PI / 2))) * 5) / 42][(int)(data->sh.x-round(cos(-data->sh.angle - (M_PI / 2))) * 5) / 42] != '1')
     {
-        data->sh.x -= round(cos(-data->sh.angle + (M_PI / 2))) * 2;
-        data->sh.y -= round(sin(-data->sh.angle + (M_PI / 2))) * 2;   
+        data->sh.x -= round(cos(-data->sh.angle - (M_PI / 2)));
+        data->sh.y -= round(sin(-data->sh.angle - (M_PI / 2)));   
     }
-    if (data->sh.movY == 1)
+    if (data->sh.movY == 1 && 
+    data->map[(int)(data->sh.y + round(sin(-data->sh.angle + M_PI)) * 5) / 42][(int)(data->sh.x+round(cos(-data->sh.angle + M_PI)) * 5) / 42] != '1')
     {
         data->sh.x += round(cos(-data->sh.angle + M_PI)) * 2;
         data->sh.y += round(sin(-data->sh.angle + M_PI)) * 2; 
     }
     if (data->sh.rot)
-        data->sh.angle += 5 * (M_PI / 180) * data->sh.rot;
+        data->sh.angle -= 3 * (M_PI / 180) * data->sh.rot;
     mlx_clear_window(data->mlx, data->win);
     render_walls(data);
+    // printf("(%d,%d)->%d,%d(%c)\n", data->sh.x, data->sh.y, data->sh.x/42, data->sh.y/42, data->map[data->sh.y/42][data->sh.x/42]);
     data->i++;
+    // usleep(5000);
     return 1;
 
 }
 void init_texture(t_data *data)
 {
     int x;
-    printf("hahowa sala\n");
+    // printf("hahowa sala\n");
     data->txtr.NO.img =  mlx_xpm_file_to_image(data->mlx, data->no, &x, &x);
     data->txtr.NO.addr = mlx_get_data_addr(data->txtr.NO.img, &data->txtr.NO.bpp, &data->txtr.NO.len, &data->txtr.NO.endian);
 
@@ -516,6 +539,18 @@ void init_texture(t_data *data)
     data->txtr.WE.img =  mlx_xpm_file_to_image(data->mlx, data->we, &x, &x);
     data->txtr.WE.addr = mlx_get_data_addr(data->txtr.WE.img, &data->txtr.WE.bpp, &data->txtr.WE.len, &data->txtr.WE.endian);
 }
+void    init_angle(t_data *data)
+{
+    if (data->spos.n)
+        data->sh.angle = M_PI/2;
+    else if (data->spos.s)
+        data->sh.angle = M_PI*3/2;
+    else if (data->spos.e)
+        data->sh.angle = 0;
+    else if (data->spos.w)
+        data->sh.angle = M_PI;
+}
+
 void check_text_files(t_data *data)
 {
     if (open(data->no, O_RDONLY) == -1||
@@ -528,35 +563,36 @@ void check_text_files(t_data *data)
     }
 
     init_texture(data);
+    init_angle(data);
 }
+int	quit(int keycode, t_data *data)
+{
+        // should free;
+        exit(0);
+}
+
 void cub3d(t_data data)
 {
-    t_img wall;
-    int x = 42;
-    data.sh.x = (SCREEN_W) / 2;
-    data.sh.y = (SCREEN_H) / 2;
-    data.sh.angle = 0;
-    data.sh.mov = 0;
-    data.sh.movX = 0;
-    data.sh.movY = 0;
-    data.sh.rot = 0;
-    data.i = 0;
-    printf("bye\n");
     data.mlx = mlx_init();
+    printf("f--%d\n", get_color(data.f));
+    printf("c--%d\n", get_color(data.c));
+    // exit(0);
+    // printf("f->%x\nc->%x\n",get_color(data.f), get_color(data.c));
     check_text_files(&data);
     data.win = mlx_new_window(data.mlx, SCREEN_W, SCREEN_H, "kyub_map");
     data.img.img = mlx_new_image(data.mlx, SCREEN_W, SCREEN_H);
     data.img.addr = mlx_get_data_addr(data.img.img, &data.img.bpp, &data.img.len, &data.img.endian);
     render_walls(&data);
-    // draw_map(data);
-    // player(data);
+    // draw_map(&data);
+    // player(&data);
     // printf("%s\n", data->no);
     // exit(0);azeaz
     // mlx_do_key_autorepeaton(data->mlx);
-    // mlx_hook(data->win, 2, 1L >> 0, ched_ched, data);
+    // mlx_hook(data.win, 2, 1L >> 0, ched_ched, &data);
     // mlx_hook(data->win, 2, 1L<<0, ched_ched, data);
     mlx_hook(data.win, 2, 1L<<0, pressed_key, &data);
     mlx_hook(data.win, 3, 1L<<1, release_key, &data);
+    mlx_hook(data.win, 17, 1L << 2, &quit, &data);
     mlx_loop_hook(data.mlx, update, &data);
     /*Delete old player position with key release*/
  

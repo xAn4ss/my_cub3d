@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:22:19 by ybachaki          #+#    #+#             */
-/*   Updated: 2022/12/26 23:42:20 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/01/22 02:45:25 by ybachaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@ void	init_struct(t_data *data)
 	data->map = NULL;
 	data->x_len = 0;
 	data->y_len = 0;
-	data->sh.x = 0;
-	data->sh.y = 0;
+	data->spos.n = 0;
+	data->spos.e = 0;
+	data->spos.s = 0;
+	data->spos.w = 0;
 }
 
 int	ft_len(char **tab)
@@ -50,7 +52,7 @@ char	**add(char *str, char **tab)
 	new = NULL;
 	if (!tab)
 	{
-		tab = calloc(1, sizeof(char*));
+		tab = calloc(2, sizeof(char*));
 		*tab = str;
 		return (tab);
 	}
