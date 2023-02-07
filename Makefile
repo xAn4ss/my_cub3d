@@ -20,3 +20,5 @@ clean:
 	rm -f $(NAME) $(OBJ)
 
 re: clean all
+
+#-Wall -Wextra -Werror
