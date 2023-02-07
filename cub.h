@@ -29,8 +29,9 @@ typedef struct s_sh {
 	int y;
 	double angle;
 	int rot;
+	int movX;
+	int movY;
 	int mov;
-	
 }	t_sh;
 
 typedef struct s_img{
@@ -41,10 +42,18 @@ typedef struct s_img{
 	int endian;
 } t_img;
 
+typedef struct s_txt{
+	t_img NO;
+	t_img SO;
+	t_img WE;
+	t_img EA;
+}	t_txt;
+
+
 typedef struct s_ray{
 	int x;
 	int y;
-	int dist;
+	double dist;
 	double angle;
 	int moveX;
 	int moveY;
@@ -64,7 +73,8 @@ typedef struct s_data {
 	void	*win;
 	t_img	img;
 	t_sh 	sh;
-	
+	t_txt	txtr;
+	int i;
 }	t_data;
 
 int get_color(char *s);
@@ -82,6 +92,6 @@ void	print_data(t_data *data);
 void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall);
 
 
-void    cub3d(t_data *data);
+void    cub3d(t_data data);
 
 #endif
