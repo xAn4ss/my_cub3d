@@ -149,12 +149,14 @@ double cast_coll_y(t_data *data, int moveX, int moveY, t_ray *ray)
 
 void draw_wall_N_S(t_data *data, t_ray ray, int wallX)
 {
-    int x = 1;
+    int x = 0;
     t_img NO_SO;
+        // NO_SO = data->txtr.NO;
     if (ray.angle < M_PI && ray.angle >= 0)
-        NO_SO.img = mlx_xpm_file_to_image(data->mlx, data->no, &x, &x);
+        NO_SO = data->txtr.NO;
     else
-        NO_SO.img = mlx_xpm_file_to_image(data->mlx, data->so, &x, &x);
+        NO_SO = data->txtr.SO;
+        // NO_SO = data->txtr.SO;
     int sizeH = (SCREEN_H / ray.dist) * 70;
     sizeH *= 1 / cosf(ray.angle - data->sh.angle);
     if (sizeH > 0)
@@ -167,12 +169,14 @@ void draw_wall_N_S(t_data *data, t_ray ray, int wallX)
 
 void draw_wall_W_E(t_data *data, t_ray ray, int wallX)
 {
-    int x = 1;
+    int x = 0;
     t_img W_E;
     if((ray.angle >= 0.5* M_PI && ray.angle < 1.5 * M_PI))
-        W_E.img = mlx_xpm_file_to_image(data->mlx, data->we, &x, &x);
+        W_E = data->txtr.WE;
+        // W_E = data->txtr.WE;
     else
-        W_E.img = mlx_xpm_file_to_image(data->mlx, data->ea, &x, &x);
+        W_E = data->txtr.EA;
+        // W_E = data->txtr.EA;
     int sizeH = (SCREEN_H / ray.dist) * 70;
     sizeH *= 1 / cosf(ray.angle - data->sh.angle);
     if (sizeH > 0)
@@ -211,14 +215,6 @@ void cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
         rayX.dist = 2147483647;
     if (rayY.y <= 0)
         rayY.dist = 2147483647;
-    // if (rayX.dist == rayY.dist)
-    // {
-    //     // if ((rayX.y%42) == 0)
-    //     printf("******************************************n");
-    //     printf(">>x=%f\n>>y=%f\n", rayX.dist, rayY.dist);
-    //     printf("x(%d,%d)\ny(%d,%d)\n", rayX.x, rayX.y, rayY.x, rayY.y);
-    //     printf("*************************************\n");
-    // }
     if (rayX.dist < rayY.dist)
     {
         draw_wall_N_S(data, rayX, wallX);
@@ -231,10 +227,9 @@ void cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
 
 void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall)
 {
-    int wh = 1;
-    wall.addr = mlx_get_data_addr(wall.img, &wall.bpp, &wall.len, &wall.endian);
     char *pixel;
     int i = 0;
+    wall.addr = mlx_get_data_addr(wall.img, &wall.bpp, &wall.len, &wall.endian);
     int j;
     int y = (SCREEN_H / 2) - (height / 2);
     int px, py = 0;
@@ -434,18 +429,6 @@ void draw_background(t_data *data, int floorColor, int ceilColor)
     }
 }
 
-void check_text_files(t_data *data)
-{
-    if (open(data->no, O_RDONLY) == -1||
-        open(data->ea, O_RDONLY) == -1 ||
-            open(data->so, O_RDONLY) == -1 ||
-                open(data->we, O_RDONLY) == -1)
-    {
-        printf("Test file not found-_-\n");
-        exit(EXIT_FAILURE);
-    }
-
-}
 int pressed_key(int num, t_data *data)
 {
     if (num == 113)
@@ -517,35 +500,75 @@ int update(t_data *data)
     return 1;
 
 }
+void init_texture(t_data *data)
+{
+    int x;
+    printf("hahowa sala\n");
+    data->txtr.NO.img =  mlx_xpm_file_to_image(data->mlx, data->no, &x, &x);
+    data->txtr.NO.addr = mlx_get_data_addr(data->txtr.NO.img, &data->txtr.NO.bpp, &data->txtr.NO.len, &data->txtr.NO.endian);
 
-void cub3d(t_data *data)
+    data->txtr.SO.img =  mlx_xpm_file_to_image(data->mlx, data->so, &x, &x);
+    data->txtr.SO.addr = mlx_get_data_addr(data->txtr.SO.img, &data->txtr.SO.bpp, &data->txtr.SO.len, &data->txtr.SO.endian);
+
+    data->txtr.EA.img =  mlx_xpm_file_to_image(data->mlx, data->ea, &x, &x);
+    data->txtr.EA.addr = mlx_get_data_addr(data->txtr.EA.img, &data->txtr.EA.bpp, &data->txtr.EA.len, &data->txtr.EA.endian);
+
+    data->txtr.WE.img =  mlx_xpm_file_to_image(data->mlx, data->we, &x, &x);
+    data->txtr.WE.addr = mlx_get_data_addr(data->txtr.WE.img, &data->txtr.WE.bpp, &data->txtr.WE.len, &data->txtr.WE.endian);
+}
+void check_text_files(t_data *data)
+{
+    if (open(data->no, O_RDONLY) == -1||
+        open(data->ea, O_RDONLY) == -1 ||
+            open(data->so, O_RDONLY) == -1 ||
+                open(data->we, O_RDONLY) == -1)
+    {
+        printf("Test file not found-_-\n");
+        exit(EXIT_FAILURE);
+    }
+
+    init_texture(data);
+}
+void cub3d(t_data data)
 {
     t_img wall;
     int x = 42;
-    data->sh.x = (SCREEN_W) / 2;
-    data->sh.y = (SCREEN_H) / 2;
-    data->sh.angle = 0;
-    data->sh.mov = 0;
-    data->sh.movX = 0;
-    data->sh.movY = 0;
-    data->sh.rot = 0;
-    data->i = 0;
-    check_text_files(data);
-    data->mlx = mlx_init();
-    data->win = mlx_new_window(data->mlx, SCREEN_W, SCREEN_H, "kyub_map");
-    data->img.img = mlx_new_image(data->mlx, SCREEN_W, SCREEN_H);
-    data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bpp, &data->img.len, &data->img.endian);
-    render_walls(data);
+    data.sh.x = (SCREEN_W) / 2;
+    data.sh.y = (SCREEN_H) / 2;
+    data.sh.angle = 0;
+    data.sh.mov = 0;
+    data.sh.movX = 0;
+    data.sh.movY = 0;
+    data.sh.rot = 0;
+    data.i = 0;
+    printf("bye\n");
+    data.mlx = mlx_init();
+    check_text_files(&data);
+    data.win = mlx_new_window(data.mlx, SCREEN_W, SCREEN_H, "kyub_map");
+    data.img.img = mlx_new_image(data.mlx, SCREEN_W, SCREEN_H);
+    data.img.addr = mlx_get_data_addr(data.img.img, &data.img.bpp, &data.img.len, &data.img.endian);
+    render_walls(&data);
     // draw_map(data);
     // player(data);
     // printf("%s\n", data->no);
     // exit(0);azeaz
     // mlx_do_key_autorepeaton(data->mlx);
     // mlx_hook(data->win, 2, 1L >> 0, ched_ched, data);
-    mlx_hook(data->win, 2, 1L<<0, ched_ched, data);
-    // mlx_hook(data->win, 2, 1L<<0, pressed_key, data);
-    // mlx_hook(data->win, 3, 1L<<1, release_key, data);
-    // mlx_loop_hook(data->mlx, update, data);
+    // mlx_hook(data->win, 2, 1L<<0, ched_ched, data);
+    mlx_hook(data.win, 2, 1L<<0, pressed_key, &data);
+    mlx_hook(data.win, 3, 1L<<1, release_key, &data);
+    mlx_loop_hook(data.mlx, update, &data);
     /*Delete old player position with key release*/
-    mlx_loop(data->mlx);
+ 
+    mlx_loop(data.mlx);
 }
+
+
+
+
+
+
+
+
+
+
