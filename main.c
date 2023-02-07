@@ -68,7 +68,7 @@ int	main(int argc, char **argv)
 			exit(1);
 		}
 		print_data(&data);
-		cub3d(&data);
+		cub3d(data);
 	}
 	return (0);
 }
