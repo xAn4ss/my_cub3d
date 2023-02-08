@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
+/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:21:21 by ybachaki          #+#    #+#             */
-/*   Updated: 2022/12/30 03:24:13 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/07 18:48:12 by an4ss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@
 // #include <X11/keysym.h>
 #define SCREEN_W 720
 #define SCREEN_H 480
+#define LEFT 113
+#define UP 122
+#define RIGHT 100
+#define DOWN 115
+#define ECHAP 65307
+#define ROT_LEFT 65361
+#define ROT_RIGHT 65363
 typedef struct s_player {
 	int x;
 	int y;
@@ -83,6 +90,9 @@ typedef struct s_data {
 	int i;
 }	t_data;
 
+
+void handle_move_x(t_data *data);
+void handle_move_y(t_data *data);
 int get_color(char *s);
 void    draw_background(t_data *data, int floorColor, int ceilColor);
 int		check_map_name(char *name);
