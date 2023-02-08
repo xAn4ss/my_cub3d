@@ -492,8 +492,8 @@ int update(t_data *data)
     if (data->sh.movX == -1 && 
     data->map[(int)(data->sh.y + round(sin(-data->sh.angle - (M_PI / 2))) * 5) / 42][(int)(data->sh.x+round(cos(-data->sh.angle - (M_PI / 2))) * 5) / 42] != '1')
     {
-        data->sh.x += round(cos(-data->sh.angle - (M_PI / 2)));
-        data->sh.y += round(sin(-data->sh.angle - (M_PI / 2)));
+        data->sh.x += round(cos(-data->sh.angle - (M_PI / 2))) * 2;
+        data->sh.y += round(sin(-data->sh.angle - (M_PI / 2))) * 2;
     }
     if (data->sh.movY == -1 && 
     data->map[(int)(data->sh.y + round(sin(-data->sh.angle)) * 5) / 42][(int)(data->sh.x+round(cos(-data->sh.angle)) * 5) / 42] != '1')
@@ -504,8 +504,8 @@ int update(t_data *data)
     if (data->sh.movX == 1 && 
     data->map[(int)(data->sh.y - round(sin(-data->sh.angle - (M_PI / 2))) * 5) / 42][(int)(data->sh.x-round(cos(-data->sh.angle - (M_PI / 2))) * 5) / 42] != '1')
     {
-        data->sh.x -= round(cos(-data->sh.angle - (M_PI / 2)));
-        data->sh.y -= round(sin(-data->sh.angle - (M_PI / 2)));   
+        data->sh.x -= round(cos(-data->sh.angle - (M_PI / 2))) * 2;
+        data->sh.y -= round(sin(-data->sh.angle - (M_PI / 2))) * 2;   
     }
     if (data->sh.movY == 1 && 
     data->map[(int)(data->sh.y + round(sin(-data->sh.angle + M_PI)) * 5) / 42][(int)(data->sh.x+round(cos(-data->sh.angle + M_PI)) * 5) / 42] != '1')
