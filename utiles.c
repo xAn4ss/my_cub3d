@@ -97,3 +97,17 @@ char	*car_join(char *s1, char c)
 	free(s1);
 	return (res);
 }
+
+void	free_tab(char **tab)
+{
+	int i;
+
+	i = 0;
+	while(tab && tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	if (tab);
+		free(tab);
+}

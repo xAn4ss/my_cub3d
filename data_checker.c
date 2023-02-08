@@ -14,8 +14,8 @@
 
 int check_line(char **line, int x)
 {
-	int i;
-	char *new;
+	int		i;
+	char	*new;
 
 	i = 0;
 	new = NULL;
@@ -74,76 +74,66 @@ void add_to_struct(t_data *data, char **tab)
 			data->c = add_after_split(tab[i], 1);
 		i++;
 	}
-	// must free **tab , use strdup
+	free_tab(tab);
+
+}
+
+int	check_len(char *str)
+{
+	char	**temp;
+	int		i;
+
+	i = 0;
+	temp = 0;
+	temp = ft_split(str, ',');
+	if (!temp || ft_len(temp) != 3)
+	{
+		free_tab(temp);
+		return 0;
+	}
+	while (temp && temp[i])
+	{
+		if (ft_atoi(temp[i]) > 255 || ft_atoi(temp[i]) < 0)
+		{
+			free_tab(temp);
+			return (0);
+		}
+		i++;
+	}
+	free_tab(temp);
+	return 1;
 }
 
 int check_c_f(t_data *data)
 {
-	char **temp;
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	if (!check_colors(data))
+	if (!check_colors1(data->f) || !check_colors1(data->c))
 		return 0;
-	temp = NULL;
-	temp = ft_split(data->c, ',');
-	while (j < 2)
-	{
-		while (temp && temp[i])
-		{
-			if (ft_atoi(temp[i]) > 255 || ft_atoi(temp[i]) < 0)
-				return (0);
-			i++;
-		}
-
-		j++;
-		i = 0;
-		temp = ft_split(data->f, ',');
-	}
-
+	if (!check_len(data->c) || !check_len(data->f))
+		return 0;
 	return (1);
 }
 
-int check_colors(t_data *data)
+int	check_colors(char *str)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
-	while (j < 3 && data->c[i])
+	while (j < 3 && str[i])
 	{
-		if (data->c[i] == ',')
+		if (str[i] == ',')
 		{
 			j++;
 			i++;
 			continue;
 		}
-		if (!ft_isdigit(data->c[i]))
+		if (!ft_isdigit(str[i]))
 			return 0;
 		i++;
 	}
-	if (data->c[i] || j != 2)
+	if (str[i] || j != 2)
 		return 0;
-	i = 0;
-	j = 0;
-	while (j < 3 && data->f[i])
-	{
-		if (data->f[i] == ',')
-		{
-			j++;
-			i++;
-			continue;
-		}
-		if (!ft_isdigit(data->f[i]))
-			return 0;
-		i++;
-	}
-	if (data->f[i] || j != 2)
-		return 0;
-
 	return 1;
 }
 
@@ -152,6 +142,7 @@ int check_data(t_data *data)
 	if (!data || !data->c || !data->ea || !data->f || !data->no || !data->so ||
 	!data->we || !check_c_f(data) || !data->map || !data->x_len || !data->y_len)
 		return (0);
+		// freeeeeeeeeeeeee!!!
 	return (1);
 }
 
@@ -164,8 +155,10 @@ int map_reader(t_data *data, int fd)
 	line = NULL;
 	line = get_next_line(fd);
 	while (line && !check_line(&line, 0))
+	{
+		free(line);
 		line = get_next_line(fd);
-
+	}
 	while (line && line[0] != '\n')
 	{
 		i++;
@@ -175,7 +168,11 @@ int map_reader(t_data *data, int fd)
 		line = get_next_line(fd);
 	}
 	if (line && line[0] == '\n')
+	{
+		free(line);
+		free_tab(data->map);
 		return (0);
+	}
 	data->y_len = i;
 	return (1);
 }
@@ -199,18 +196,14 @@ int check_file_content(int fd, t_data *data)
 		if (ft_len(tab) < 6)
 			line = get_next_line(fd);
 	}
-
-	if (ft_len(tab) != 6)
+	if (!tab || ft_len(tab) != 6)
 	{
-		// free
+		free_tab(tab);
 		return (0);
 	}
-
 	add_to_struct(data, tab);
-
 	if (!map_reader(data, fd))
 		return (0);
-
 	if (!check_data(data))
 		return (0);
 	if (!map_checker(data))

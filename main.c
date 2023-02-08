@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 		}
 		print_data(&data);
 		// window(&data);
-		cub3d(data);
+		// cub3d(data);
 	}
 	return (0);
 }

@@ -19,8 +19,8 @@
 #include <math.h>
 #include <ctype.h>
 #include"get_next_line.h"
-#include"Libft/libft.h"
-#include "../minilibx-linux-master/mlx.h"
+#include"libft.h"
+#include "../minilibx-linux/mlx.h"
 // #include <X11/keysym.h>
 #define SCREEN_W 720
 #define SCREEN_H 480
@@ -31,6 +31,7 @@
 #define ECHAP 65307
 #define ROT_LEFT 65361
 #define ROT_RIGHT 65363
+
 typedef struct s_player {
 	int x;
 	int y;
@@ -60,7 +61,6 @@ typedef struct s_txt{
 	t_img WE;
 	t_img EA;
 }	t_txt;
-
 
 typedef struct s_ray{
 	int x;
@@ -107,9 +107,10 @@ char	*car_join(char *s1, char c);
 void	print_data(t_data *data);
 void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall);
 int	wals_check(t_data *data);
-int check_colors(t_data *data);
-int	map_checker(t_data *data);
+int	check_colors(char *str);
 
+int	map_checker(t_data *data);
+void	free_tab(char **tab);
 int check_c_f(t_data *data);
 void    cub3d(t_data data);
 
