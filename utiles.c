@@ -14,6 +14,7 @@
 
 void	init_struct(t_data *data)
 {
+	data->mlx = mlx_init();
 	data->no = NULL;
 	data->so = NULL;
 	data->we = NULL;
