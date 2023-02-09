@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:22:19 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/02/09 06:34:35 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 01:19:25 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*car_join(char *s1, char c)
 
 void	free_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while(tab && tab[i])
@@ -110,4 +110,23 @@ void	free_tab(char **tab)
 	}
 	if (tab)
 		free(tab);
+}
+
+void	ft_free(t_data *data)
+{
+	if (data->no)
+		free(data->no);
+	if (data->so)
+		free(data->no);
+	if (data->so)
+		free(data->we);
+	if (data->we)
+		free(data->no);
+	if (data->ea)
+		free(data->ea);
+	if (data->c)
+		free(data->c);
+	if (data->f)
+		free(data->f);
+	free_tab(data->map);
 }

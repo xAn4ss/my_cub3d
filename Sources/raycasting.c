@@ -3,43 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:20:58 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 11:43:48 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 20:26:53 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub.h"
 
-void draw_wall_N_S(t_data *data, t_ray ray, int wallX)
+void	draw_wall_n_s(t_data *data, t_ray ray, int wallX)
 {
-    int sizeH;
-    t_img NO_SO;
+	int		sizeH;
+	t_img	NO_SO;
 
-    if (ray.angle < M_PI && ray.angle >= 0)
-        NO_SO = data->txtr.NO;
-    else
-        NO_SO = data->txtr.SO;
-    ray.sizeH = (SCREEN_H / ray.dist) * 70;
-    ray.sizeH *= 1 / cosf(ray.angle - data->sh.angle);
-    if (sizeH > 0)
-        draw_shape_x(data, ray, wallX, NO_SO);
+	if (ray.angle < M_PI && ray.angle >= 0)
+		NO_SO = data->txtr.NO;
+	else
+		NO_SO = data->txtr.SO;
+	ray.sizeH = (SCREEN_H / ray.dist) * 70;
+	ray.sizeH *= 1 / cosf(ray.angle - data->sh.angle);
+	if (ray.sizeH > 0)
+		draw_shape_x(data, ray, wallX, NO_SO);
 }
 
-void draw_wall_W_E(t_data *data, t_ray ray, int wallX)
+void	draw_wall_w_e(t_data *data, t_ray ray, int wallX)
 {
-    t_img W_E;
-    int sizeH;
+	int 	sizeH;
+	t_img	W_E;
 
-    if(ray.angle >= 0.5 * M_PI && ray.angle < 1.5 * M_PI)
-        W_E = data->txtr.WE;
-    else
-        W_E = data->txtr.EA;
-    ray.sizeH = (SCREEN_H / ray.dist) * 70;
-    ray.sizeH *= 1 / cosf(ray.angle - data->sh.angle);
-    if (sizeH > 0)
-        draw_shape_y(data, ray, wallX, W_E);
+	if(ray.angle >= 0.5 * M_PI && ray.angle < 1.5 * M_PI)
+		W_E = data->txtr.WE;
+	else
+		W_E = data->txtr.EA;
+	ray.sizeH = (SCREEN_H / ray.dist) * 70;
+	ray.sizeH *= 1 / cosf(ray.angle - data->sh.angle);
+	if (ray.sizeH > 0)
+		draw_shape_y(data, ray, wallX, W_E);
 }
 
 double cast_coll_x(t_data *data, t_ray *ray)
@@ -101,7 +101,7 @@ void raycating (t_data *data, t_ray *rayX, t_ray *rayY, int wallX)
     if (rayY->y <= 0)
         rayY->dist = 2147483647;
     if (rayX->dist < rayY->dist)
-        draw_wall_N_S(data, *rayX, wallX);
+        draw_wall_n_s(data, *rayX, wallX);
     else if (rayX->dist > rayY->dist)
-        draw_wall_W_E(data, *rayY, wallX);
+        draw_wall_w_e(data, *rayY, wallX);
 }

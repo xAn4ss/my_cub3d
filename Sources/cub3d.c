@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:34:25 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 10:46:07 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 19:49:00 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,68 +95,3 @@ void	cub3d(t_data data)
 	mlx_loop_hook(data.mlx, update, &data);
 	mlx_loop(data.mlx);
 }
-
-// void square(t_data *data, int x, int y, void *mlx, void *win)
-// {
-//	  ++x;
-//	  ++y;
-//	  int i = x;
-//	  int j = y;
-
-//	  while (i < x + 38)
-//	  {
-//	  j = y;
-//	  while (j < y + 38)
-//	  {
-//	  mlx_pixel_put(mlx, win, i, j, 0x0000FF);
-//	  j++;
-//	  }
-//	  i++;
-//	  }
-// }
-
-// void draw_map(t_data *data)
-// {
-//	  int x, y = 0;
-//	  while (data->map && data->map[y])
-//	  {
-//	  x = 0;
-//	  while (data->map && data->map[y][x])
-//	  {
-//	  if (data->map[y][x] == '1')
-//	  square(data, x * 42, y * 42, data->mlx, data->win);
-//	  x++;
-//	  }
-//	  y++;
-//	  }
-// }
-
-// /*  DRAW LINE FROM PLAYER'S POSITION TO X,Y*/
-// void draw_line(t_data *data, double x, double y, int moveX, int moveY, int color)
-// {
-//	  int dist = sqrt((((double)data->sh.x + x) * ((double)data->sh.x + x)) 
-	// + ((double)data->sh.y + y) * ((double)data->sh.y + y));
-//	  double Dx = data->sh.x - x;
-//	  double Dy = data->sh.y - y;
-//	  double Ux = Dx / dist;
-//	  double Uy = Dy / dist;
-//	  double pixX = data->sh.x;
-//	  double pixY = data->sh.y;
-//	  int i = 0;
-//	  while (dist && dist < 2147483647 && dist > 0)
-//	  {
-//	  mlx_pixel_put(data->mlx, data->win, pixX, pixY, color);
-//	  pixX -= Ux;
-//	  pixY -= Uy;
-//	  dist--;
-//	  }
-// }
-
-
-
-
-
-
-
-
-
