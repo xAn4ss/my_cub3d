@@ -208,6 +208,7 @@ int check_file_content(int fd, t_data *data)
 		return (0);
 	if (!map_checker(data))
 		return (0);
+		// freeeeeeeeeeeeeeee!!!!!
 	// must close fd
 	return (1);
 }

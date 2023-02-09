@@ -82,8 +82,7 @@ int	map_checker(t_data *data)
 		while(data->map[i][j] && (data->map[i][j] == ' ' || data->map[i][j] == '\t'))
 			j++;
 		if (data->map[i][j] != '1' || data->map[i][ft_strlen(data->map[i]) - 1] != '1')
-		// freeeeeeeeeee
-			return (0);		
+			return (0);
 		while(data->map[i][j])
 		{
 			if (!check_map_contenet(data, i, j))

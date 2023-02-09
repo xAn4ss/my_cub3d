@@ -20,7 +20,7 @@
 #include <ctype.h>
 #include"get_next_line.h"
 #include"libft.h"
-#include "mlx.h"
+#include "../minilibx-linux/mlx.h"
 // #include <X11/keysym.h>
 #define SCREEN_W 1080
 #define SCREEN_H 720
