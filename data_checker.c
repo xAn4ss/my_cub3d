@@ -31,8 +31,8 @@ int check_line(char **line, int x)
 
 char *add_after_split(char *str, int i)
 {
-	int n_spaces;
-	char *temp;
+	int		n_spaces;
+	char	*temp;
 
 	n_spaces = 0;
 	temp = NULL;
@@ -55,7 +55,7 @@ char *add_after_split(char *str, int i)
 
 void add_to_struct(t_data *data, char **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
@@ -75,7 +75,6 @@ void add_to_struct(t_data *data, char **tab)
 		i++;
 	}
 	free_tab(tab);
-
 }
 
 int	check_len(char *str)
@@ -142,17 +141,15 @@ int check_data(t_data *data)
 	if (!data || !data->c || !data->ea || !data->f || !data->no || !data->so ||
 	!data->we || !check_c_f(data) || !data->map || !data->x_len || !data->y_len)
 		return (0);
-		// freeeeeeeeeeeeee!!!
 	return (1);
 }
-
+///////////////////////////////////////////////////////////
 int map_reader(t_data *data, int fd)
 {
-	int i;
-	char *line;
+	int		i;
+	char	*line;
 
 	i = 0;
-	line = NULL;
 	line = get_next_line(fd);
 	while (line && !check_line(&line, 0))
 	{
@@ -164,7 +161,7 @@ int map_reader(t_data *data, int fd)
 		i++;
 		if (ft_strlen(line) - 1 > data->x_len)
 			data->x_len = ft_strlen(line) - 1;
-		data->map = add(line, data->map);
+		data->map = add(ft_strtrim(line, "\n"), data->map);
 		line = get_next_line(fd);
 	}
 	if (line && line[0] == '\n')
@@ -177,15 +174,14 @@ int map_reader(t_data *data, int fd)
 	return (1);
 }
 
-int check_file_content(int fd, t_data *data)
+int read_cube_file(t_data *data, int fd)
 {
-	char *line;
-	char **tab;
-	int i;
+	char	*line;
+	char	**tab;
+	int		i;
 
 	i = 0;
 	tab = NULL;
-	line = NULL;
 	line = get_next_line(fd);
 	while (line && ft_len(tab) < 6)
 	{
@@ -202,13 +198,25 @@ int check_file_content(int fd, t_data *data)
 		return (0);
 	}
 	add_to_struct(data, tab);
+	return (1);
+}
+
+int check_file_content(int fd, t_data *data)
+{
+	if (!read_cube_file(data, fd))
+		return (0);
 	if (!map_reader(data, fd))
 		return (0);
 	if (!check_data(data))
+	{
+		ft_free(data);
 		return (0);
+	}
 	if (!map_checker(data))
+	{
+		ft_free(data);
 		return (0);
-		// freeeeeeeeeeeeeeee!!!!!
-	// must close fd
+	}
 	return (1);
 }
+//////////////////////////////////////////////////////

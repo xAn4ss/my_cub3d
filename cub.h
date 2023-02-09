@@ -90,7 +90,6 @@ typedef struct s_data {
 	int i;
 }	t_data;
 
-
 void handle_move_x(t_data *data);
 void handle_move_y(t_data *data);
 int get_color(char *s);
@@ -113,5 +112,5 @@ int	map_checker(t_data *data);
 void	free_tab(char **tab);
 int check_c_f(t_data *data);
 void    cub3d(t_data data);
-
+void	ft_free(t_data *data);
 #endif
