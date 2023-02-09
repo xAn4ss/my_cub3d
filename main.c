@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:57:56 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/01/04 19:35:06 by ybachaki         ###   ########.fr       */
+/*   Updated: 2023/02/09 06:35:18 by an4ss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 		}
 		print_data(&data);
 		// window(&data);
-		// cub3d(data);
+		cub3d(data);
 	}
 	return (0);
 }
