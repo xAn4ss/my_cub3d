@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:22:19 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/01/22 02:45:25 by ybachaki         ###   ########.fr       */
+/*   Updated: 2023/02/09 01:19:25 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,6 @@ void	free_tab(char **tab)
 		free(tab[i]);
 		i++;
 	}
-	if (tab);
+	if (tab)
 		free(tab);
 }
