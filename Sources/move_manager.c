@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 18:39:00 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 20:09:55 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:14:50 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ void	handle_move_x(t_data *data)
 
 	if (data->sh.movX == -1)
 	{
-		new_x = data->sh.x + round(cos(-data->sh.angle - (M_PI / 2))) * (MOVE);
-		if (data->map[data->sh.y / 42][new_x / 42] != '1')
-			data->sh.x = new_x;
-		new_y = data->sh.y + round(sin(-data->sh.angle - (M_PI / 2))) * (MOVE);
-		if (data->map[new_y / 42][data->sh.x / 42] != '1')
-			data->sh.y = new_y;
+		new_x = round(cos(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x + (new_x * 2)) / 42] != '1')
+			data->sh.x += new_x;
+		new_y = round(sin(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[(data->sh.y + (new_y * 2)) / 42][data->sh.x / 42] != '1')
+			data->sh.y += new_y;
 	}
 	else if (data->sh.movX == 1)
 	{
-		new_x = data->sh.x - round(cos(-data->sh.angle - (M_PI / 2))) * (MOVE);
-		if (data->map[data->sh.y / 42][new_x / 42] != '1')
-			data->sh.x = new_x;
-		new_y = data->sh.y - round(sin(-data->sh.angle - (M_PI / 2))) * (MOVE);
-		if (data->map[new_y / 42][data->sh.x / 42] != '1')
-			data->sh.y = new_y;
+		new_x = round(cos(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x - (new_x * 2)) / 42] != '1')
+			data->sh.x -= new_x;
+		new_y = round(sin(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[(data->sh.y - (new_y * 2)) / 42][data->sh.x / 42] != '1')
+			data->sh.y -= new_y;
 	}
 }
 
@@ -44,21 +44,21 @@ void	handle_move_y(t_data *data)
 
 	if (data->sh.movY == -1)
 	{
-		new_x = data->sh.x + round(cos(-data->sh.angle)) * (MOVE);
-		if (data->map[data->sh.y / 42][new_x / 42] != '1')
-			data->sh.x = new_x;
-		new_y = data->sh.y + round(sin(-data->sh.angle)) * (MOVE);
-		if (data->map[new_y / 42][data->sh.x / 42] != '1')
-			data->sh.y = new_y;
+		new_x = round(cos(-data->sh.angle)) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x + (new_x * 2)) / 42] != '1')
+			data->sh.x += new_x;
+		new_y = round(sin(-data->sh.angle)) * (MOVE);
+		if (data->map[(data->sh.y + (new_y * 2)) / 42][data->sh.x / 42] != '1')
+			data->sh.y += new_y;
 	}
 	if (data->sh.movY == 1)
 	{
-		new_x = data->sh.x + round(cos(-data->sh.angle + M_PI)) * (MOVE);
-		if (data->map[data->sh.y / 42][new_x / 42] != '1')
-			data->sh.x = new_x;
-		new_y = data->sh.y + round(sin(-data->sh.angle + M_PI)) * (MOVE);
-		if (data->map[new_y / 42][data->sh.x / 42] != '1')
-			data->sh.y = new_y;
+		new_x = round(cos(-data->sh.angle + M_PI)) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x + (new_x * 2)) / 42] != '1')
+			data->sh.x += new_x;
+		new_y = round(sin(-data->sh.angle + M_PI)) * (MOVE);
+		if (data->map[(data->sh.y + (new_y * 2)) / 42][data->sh.x / 42] != '1')
+			data->sh.y += new_y;
 	}
 }
 

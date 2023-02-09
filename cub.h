@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:21:21 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/02/09 21:18:19 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:08:03 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <ctype.h>
 #include"get_next_line.h"
 #include"libft.h"
-#include "../minilibx-linux/mlx.h"
+#include "mlx.h"
 // #include <X11/keysym.h>
 #define SCREEN_W 1080
 #define SCREEN_H 720

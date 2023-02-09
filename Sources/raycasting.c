@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:20:58 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 20:26:53 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:21:30 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,21 @@
 
 void	draw_wall_n_s(t_data *data, t_ray ray, int wallX)
 {
-	int		sizeH;
-	t_img	NO_SO;
+	t_img	no_so;
 
 	if (ray.angle < M_PI && ray.angle >= 0)
-		NO_SO = data->txtr.NO;
+		no_so = data->txtr.NO;
 	else
-		NO_SO = data->txtr.SO;
+		no_so = data->txtr.SO;
 	ray.sizeH = (SCREEN_H / ray.dist) * 70;
 	ray.sizeH *= 1 / cosf(ray.angle - data->sh.angle);
 	if (ray.sizeH > 0)
-		draw_shape_x(data, ray, wallX, NO_SO);
+		draw_shape_x(data, ray, wallX, no_so);
 }
 
 void	draw_wall_w_e(t_data *data, t_ray ray, int wallX)
 {
-	int 	sizeH;
-	t_img	W_E;
+	t_img	W;
 
 	if(ray.angle >= 0.5 * M_PI && ray.angle < 1.5 * M_PI)
 		W_E = data->txtr.WE;
