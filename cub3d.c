@@ -6,7 +6,11 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 12:04:59 by an4ss             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/02/09 02:04:33 by aoukhart         ###   ########.fr       */
+=======
+/*   Updated: 2023/02/08 10:20:52 by an4ss            ###   ########.fr       */
+>>>>>>> 3f910fb (pull)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +211,7 @@ void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall)
     int y = (SCREEN_H / 2) - (height / 2);
     int px, py = 0;
     px = x;
-    while (i < 3)
+    while (i < 1)
     {
         j = 0;
         py = y;
@@ -240,38 +244,35 @@ void process_game(t_data *data, t_ray rayX, t_ray rayY)
     {
         wallX -= 1;
         cast_ray(data, wallX, rayX, rayY);
+<<<<<<< HEAD
         rayX.angle += 0.055 * M_PI / 180;
         rayY.angle += 0.055 * M_PI / 180;
+=======
+        rayX.angle += 0.08 * M_PI / 180;
+        rayY.angle += 0.08 * M_PI / 180;
+        printf("%d\n", wallX);
+>>>>>>> 3f910fb (pull)
     }
     mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 }
 
-void cast_rays(t_data *data, t_ray rayX, t_ray rayY)
-{
-    t_ray ray;
-    float dist;
-    int sizeH = 0;
-    int moveX, moveY = 0;
-	data->sh.angle = fmod(data->sh.angle , (2 * M_PI));
-	if (data->sh.angle < 0)
-		data->sh.angle += 2 * M_PI;
-    process_game(data, rayX, rayY);
-}
+// void player(t_data *data)
+// {
+//     t_ray rayX;
+//     t_ray rayY;
+//     cast_rays(data, rayX, rayY);
 
-void player(t_data *data)
-{
-    t_ray rayX;
-    t_ray rayY;
-    cast_rays(data, rayX, rayY);
-
-}
+// }
 void render_walls(t_data *data)
 {
     t_ray rayX;
     t_ray rayY;
+	
+    data->sh.angle = fmod(data->sh.angle , (2 * M_PI));
+	if (data->sh.angle < 0)
+		data->sh.angle += 2 * M_PI;
     draw_background(data, get_color(data->f), get_color(data->c));
-    cast_rays(data, rayX, rayY);
-
+    process_game(data, rayX, rayY);
 }
 
 int get_color(char *s)
@@ -279,8 +280,6 @@ int get_color(char *s)
     char **clrs = ft_split(s, ',');
     int color = 0;
     int i = 0;
-    int c = 0;
-    int shifter = 23;
     int p = 2;
     while (i < 3)
     {
