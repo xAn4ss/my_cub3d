@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:21:21 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/02/07 18:48:12 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 02:38:43 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@
 #include <ctype.h>
 #include"get_next_line.h"
 #include"libft.h"
-#include "../minilibx-linux/mlx.h"
+#include "mlx.h"
 // #include <X11/keysym.h>
-#define SCREEN_W 720
-#define SCREEN_H 480
-#define LEFT 113
-#define UP 122
-#define RIGHT 100
-#define DOWN 115
-#define ECHAP 65307
-#define ROT_LEFT 65361
-#define ROT_RIGHT 65363
-
+#define SCREEN_W 1080
+#define SCREEN_H 720
+#define LEFT 0/*113*/
+#define UP 13/*122*/
+#define RIGHT 2/*100*/
+#define DOWN 1/*115*/
+#define ECHAP 53/*65307*/
+#define ROT_LEFT 123/*65361*/
+#define ROT_RIGHT 124/*65363*/
+#define MOVE 5
 typedef struct s_player {
 	int x;
 	int y;
@@ -108,7 +108,7 @@ void	print_data(t_data *data);
 void draw_shape(t_data *data, int height, int x, int pixelX, t_img wall);
 int	wals_check(t_data *data);
 int	check_colors(char *str);
-
+void render_walls(t_data *data);
 int	map_checker(t_data *data);
 void	free_tab(char **tab);
 int check_c_f(t_data *data);
