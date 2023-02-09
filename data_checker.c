@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_checker.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:22:01 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/01/22 02:45:55 by ybachaki         ###   ########.fr       */
+/*   Updated: 2023/02/09 01:19:09 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	check_len(char *str)
 
 int check_c_f(t_data *data)
 {
-	if (!check_colors1(data->f) || !check_colors1(data->c))
+	if (!check_colors(data->f) || !check_colors(data->c))
 		return 0;
 	if (!check_len(data->c) || !check_len(data->f))
 		return 0;
