@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "cmath": "c",
+<<<<<<< HEAD
         "cub.h": "c"
+=======
+        "__hash_table": "c"
+>>>>>>> 9c943225ec4a8468cecd9f5739015609c22c16f9
     }
 }

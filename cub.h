@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:21:21 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/02/09 20:27:01 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 21:18:19 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <ctype.h>
 #include"get_next_line.h"
 #include"libft.h"
-#include "mlx.h"
+#include "../minilibx-linux/mlx.h"
 // #include <X11/keysym.h>
 #define SCREEN_W 1080
 #define SCREEN_H 720
@@ -99,7 +99,6 @@ int	release_key(int num, t_data *data);
 int	update(t_data *data);
 void	draw_wall_n_s(t_data *data, t_ray ray, int wallX);
 void	draw_wall_w_e(t_data *data, t_ray ray, int wallX);
-
 void	ft_error(t_data *data);
 int	quit(int keycode, t_data *data);
 void raycating (t_data *data, t_ray *rayX, t_ray *rayY, int wallX);
