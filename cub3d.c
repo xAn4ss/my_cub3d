@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 12:04:59 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/07 19:33:06 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 02:04:33 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,10 +238,10 @@ void process_game(t_data *data, t_ray rayX, t_ray rayY)
     wallX = SCREEN_W;
     while (rayX.angle < data->sh.angle + (M_PI / 6) && wallX > 0)
     {
-        wallX -= 3;
+        wallX -= 1;
         cast_ray(data, wallX, rayX, rayY);
-        rayX.angle += 0.25 * M_PI / 180;
-        rayY.angle += 0.25 * M_PI / 180;
+        rayX.angle += 0.055 * M_PI / 180;
+        rayY.angle += 0.055 * M_PI / 180;
     }
     mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 }
@@ -318,6 +318,7 @@ void draw_background(t_data *data, int floorColor, int ceilColor)
 
 int pressed_key(int num, t_data *data)
 {
+    printf("-->%d\n", num);
     if (num == ECHAP)
         exit(0);
         // free
@@ -355,20 +356,20 @@ int release_key(int num, t_data *data)
 
 int update(t_data *data)
 {
-    if (data->i < 2000)
-	{
-		data->i++;
-		return 1;
-	}
-	else if (data->i == 2000)
-		data->i = 0;
+    // if (data->i < 500)
+	// {
+	// 	data->i++;
+	// 	return 1;
+	// }
+	// else if (data->i == 500)
+	// 	data->i = 0;
     handle_move_x(data);
     handle_move_y(data);
     if (data->sh.rot)
         data->sh.angle -= 3 * (M_PI / 180) * data->sh.rot;
     mlx_clear_window(data->mlx, data->win);
     render_walls(data);
-    data->i++;
+    // data->i++;
     return 1;
 
 }
