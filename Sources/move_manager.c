@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 18:39:00 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/10 23:31:35 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/11 00:33:12 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	handle_move_x(t_data *data)
 {
-	double new_x;
-	double new_y;
+	int new_x;
+	int new_y;
 
 	if (data->sh.move_x == -1)
 	{
 		new_x = round(cos(-data->sh.angle - (M_PI / 2)));
 		new_y = round(sin(-data->sh.angle - (M_PI / 2)));
-		if (data->map[(int)(data->sh.y + (new_y * 15)) / 42][(int)(data->sh.x + (new_x * 15))/ 42] != '1')
+		if (data->map[(data->sh.y + (new_y * 15)) / 42][(data->sh.x + (new_x * 15))/ 42] != '1')
 		{
 			data->sh.x += new_x;
 			data->sh.y += new_y;
@@ -29,7 +29,9 @@ void	handle_move_x(t_data *data)
 	}
 	else if (data->sh.move_x == 1)
 	{
-		if (data->map[(int)(data->sh.y - (new_y * 15)) / 42][(int)(data->sh.x - (new_x * 15))/ 42] != '1')
+		new_x = round(cos(-data->sh.angle - (M_PI / 2)));
+		new_y = round(sin(-data->sh.angle - (M_PI / 2)));
+		if (data->map[(data->sh.y - (new_y * 15)) / 42][(data->sh.x - (new_x * 15))/ 42] != '1')
 		{
 			data->sh.x -= new_x;
 			data->sh.y -= new_y;
@@ -39,14 +41,14 @@ void	handle_move_x(t_data *data)
 
 void	handle_move_y(t_data *data)
 {
-	double new_x;
-	double new_y;
+	int	new_x;
+	int	new_y;
 
 	if (data->sh.move_y == -1)
 	{
 		new_x = round(cos(-data->sh.angle));
 		new_y = round(sin(-data->sh.angle));
-		if (data->map[(int)(data->sh.y + (new_y * 15)) / 42][(int)(data->sh.x + (new_x * 15)) / 42] != '1')
+		if (data->map[(data->sh.y + (new_y * 15)) / 42][(data->sh.x + (new_x * 15)) / 42] != '1')
 		{
 			data->sh.x += new_x;
 			data->sh.y += new_y;
@@ -57,7 +59,7 @@ void	handle_move_y(t_data *data)
 	{
 		new_x = round(cos(-data->sh.angle + M_PI));
 		new_y = round(sin(-data->sh.angle + M_PI));
-		if (data->map[(int)(data->sh.y + (new_y * 15)) / 42][(int)(data->sh.x + (new_x * 15)) / 42] != '1')
+		if (data->map[(data->sh.y + (new_y * 15)) / 42][(data->sh.x + (new_x * 15)) / 42] != '1')
 		{
 			data->sh.x += new_x;
 			data->sh.y += new_y;

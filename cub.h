@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:21:21 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/02/10 19:43:28 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/11 00:30:23 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@
 # define CHECK 20
 
 typedef struct s_player {
-	double	x;
-	double	y;
+	int		x;
+	int		y;
 	double	angle;
 	int		rot;
 	int		move_x;
