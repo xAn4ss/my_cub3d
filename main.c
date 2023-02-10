@@ -3,32 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:57:56 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/02/09 06:35:18 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 23:02:21 by ybachaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
 
-int check_map_name(char *name)
+int	check_map_name(char *name)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (name[i])
 	{
-		if (name[i] == '.' && name[i + 1] == 'c' && name[i + 2] == 'u' && name[i + 3] == 'b' && name[i + 4] == '\0')
+		if (name[i] == '.' && name[i + 1] == 'c' && name[i + 2] == 'u'
+			&& name[i + 3] == 'b' && name[i + 4] == '\0')
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-void print_data(t_data *data)
+void	print_data(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	printf("NO = %s\n", data->no);
@@ -50,10 +51,10 @@ void print_data(t_data *data)
 	printf("angle = %d\n", data->spos.w);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	int fd;
-	t_data data;
+	int		fd;
+	t_data	data;
 
 	init_struct(&data);
 	if (argc == 2 && check_map_name(argv[1]))
@@ -67,11 +68,9 @@ int main(int argc, char **argv)
 		if (!check_file_content(fd, &data))
 		{
 			printf("EROOR: invalide content\n");
-			// free!!!!
 			exit(1);
 		}
 		print_data(&data);
-		// window(&data);
 		cub3d(data);
 	}
 	return (0);

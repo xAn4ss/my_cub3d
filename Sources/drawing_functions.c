@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drawing_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
+/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:24:23 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 19:49:36 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 16:25:21 by an4ss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ void	draw_shape_x(t_data *data, t_ray ray, int x, t_img wall)
 	while (i < 1)
 	{
 		j = 0;
-		py = (SCREEN_H / 2) - (ray.sizeH / 2);
-		while (j < ray.sizeH)
+		py = (SCREEN_H / 2) - (ray.size_h / 2);
+		while (j < ray.size_h)
 		{
 			if (py >= 0 && py < SCREEN_H)
 			{
 				ft_memcpy(data->img.addr + py * data->img.len + x * 4, wall.addr
-					+ (j * 42 / ray.sizeH * wall.len + ray.x % 42 * 4), 3);
+					+ (j * 42 / ray.size_h * wall.len + ray.x % 42 * 4), 3);
 			}
 			py++;
 			j++;
@@ -96,13 +96,13 @@ void	draw_shape_y(t_data *data, t_ray ray, int x, t_img wall)
 	while (i < 1)
 	{
 		j = 0;
-		py = (SCREEN_H / 2) - (ray.sizeH / 2);
-		while (j < ray.sizeH)
+		py = (SCREEN_H / 2) - (ray.size_h / 2);
+		while (j < ray.size_h)
 		{
 			if (py >= 0 && py < SCREEN_H)
 			{
 				ft_memcpy(data->img.addr + py * data->img.len + x * 4, wall.addr
-					+ j * 42 / ray.sizeH * wall.len + ray.y % 42 * 4, 3);
+					+ j * 42 / ray.size_h * wall.len + ray.y % 42 * 4, 3);
 			}
 			py++;
 			j++;
@@ -110,16 +110,4 @@ void	draw_shape_y(t_data *data, t_ray ray, int x, t_img wall)
 		x++;
 		i++;
 	}
-}
-
-void	ft_error(t_data *data)
-{
-	printf("somethin's wrong with text_file -_-\n");
-	exit(EXIT_FAILURE);
-}
-
-int	quit(int keycode, t_data *data)
-{
-        // should free;
-	exit(0);
 }

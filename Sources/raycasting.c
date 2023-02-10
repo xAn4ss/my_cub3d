@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
+/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:20:58 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 22:21:30 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 17:35:36 by an4ss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,86 +20,94 @@ void	draw_wall_n_s(t_data *data, t_ray ray, int wallX)
 		no_so = data->txtr.NO;
 	else
 		no_so = data->txtr.SO;
-	ray.sizeH = (SCREEN_H / ray.dist) * 70;
-	ray.sizeH *= 1 / cosf(ray.angle - data->sh.angle);
-	if (ray.sizeH > 0)
+	ray.size_h = (SCREEN_H / ray.dist) * 70;
+	ray.size_h *= 1 / cosf(ray.angle - data->sh.angle);
+	if (ray.size_h > 0)
 		draw_shape_x(data, ray, wallX, no_so);
 }
 
 void	draw_wall_w_e(t_data *data, t_ray ray, int wallX)
 {
-	t_img	W;
+	t_img	we_ea;
 
-	if(ray.angle >= 0.5 * M_PI && ray.angle < 1.5 * M_PI)
-		W_E = data->txtr.WE;
+	if (ray.angle >= 0.5 * M_PI && ray.angle < 1.5 * M_PI)
+		we_ea = data->txtr.WE;
 	else
-		W_E = data->txtr.EA;
-	ray.sizeH = (SCREEN_H / ray.dist) * 70;
-	ray.sizeH *= 1 / cosf(ray.angle - data->sh.angle);
-	if (ray.sizeH > 0)
-		draw_shape_y(data, ray, wallX, W_E);
+		we_ea = data->txtr.EA;
+	ray.size_h = (SCREEN_H / ray.dist) * 70;
+	ray.size_h *= 1 / cosf(ray.angle - data->sh.angle);
+	if (ray.size_h > 0)
+		draw_shape_y(data, ray, wallX, we_ea);
 }
 
-double cast_coll_x(t_data *data, t_ray *ray)
+double	cast_coll_x(t_data *data, t_ray *ray)
 {
-    double	nextX;
-    double	nextY;
-    double	Dx;
-	double	Dy;
+	double	next_x;
+	double	next_y;
+	double	dx;
+	double	dy;
 
-    nextY = ray->y / 42 * 42;
-    if (ray->moveY == 1)
-        nextY += 42;
-    nextX = ray->x + (ray->y - nextY) / tan(ray->angle);
-    nextY += 2 * ray->moveY;
-    while (nextX < 42*data->x_len && nextX > 0 && nextY < 42*data->y_len && nextY > 0 && data->map[(int)floor(nextY / 42)][(int)floor(nextX / 42)] != '1')
-    {
-        Dy = 42;
-        Dx = 42 / tan(ray->angle);
-        nextX = nextX - (Dx * ray->moveY);
-        nextY = nextY + (Dy * ray->moveY);
-    }
-    nextY -= 2 * ray->moveY;
-    ray->x = (int)nextX;
-    ray->y = (int)nextY;
-    return (sqrt((((double)data->sh.x - nextX) * ((double)data->sh.x - nextX)) + ((double)data->sh.y - nextY) * ((double)data->sh.y - nextY)));
+	next_y = ray->y / 42 * 42;
+	if (ray->mov_y == 1)
+		next_y += 42;
+	next_x = ray->x + (ray->y - next_y) / tan(ray->angle);
+	next_y += 2 * ray->mov_y;
+	while (next_x < 42 * data->x_len && next_x > 0
+		&& next_y < 42 * data->y_len && next_y > 0
+		&& data->map[(int)floor(next_y / 42)]
+		[(int)floor(next_x / 42)] != '1')
+	{
+		dy = 42;
+		dx = 42 / tan(ray->angle);
+		next_x = next_x - (dx * ray->mov_y);
+		next_y = next_y + (dy * ray->mov_y);
+	}
+	next_y -= 2 * ray->mov_y;
+	ray->x = (int)next_x;
+	ray->y = (int)next_y;
+	return (sqrt(((data->sh.x - next_x) * (data->sh.x - next_x))
+			+ (data->sh.y - next_y) * (data->sh.y - next_y)));
 }
 
-double cast_coll_y(t_data *data, t_ray *ray)
+double	cast_coll_y(t_data *data, t_ray *ray)
 {
-	double	nextX;
-	double	nextY;
-	double	Dx;
-	double	Dy;
+	double	next_x;
+	double	next_y;
+	double	dx;
+	double	dy;
 
-	nextX = ray->x / 42 * 42;
-	if (ray->moveX == 1)
-		nextX += 42;
-	nextY = ray->y + (ray->x - nextX) * tan(ray->angle);
-    nextX += 2 * ray->moveX;
-    while (nextX < 42*data->x_len && nextX > 0 && nextY < 42*data->y_len && nextY > 0 && data->map[(int)floor(nextY / 42)][(int)floor(nextX / 42)] != '1')
-    {
-        Dx = 42;
-        Dy = 42 * tan(ray->angle);
-        nextX = nextX + (Dx * ray->moveX);
-        nextY = nextY - (Dy * ray->moveX);
-    }
-    nextX -= 2 * ray->moveX;
-    ray->x = (int)nextX;
-    ray->y = (int)nextY;
-    return (sqrt((((double)data->sh.x - nextX) * ((double)data->sh.x - nextX)) + ((double)data->sh.y - nextY) * ((double)data->sh.y - nextY)));
+	next_x = ray->x / 42 * 42;
+	if (ray->mov_x == 1)
+		next_x += 42;
+	next_y = ray->y + (ray->x - next_x) * tan(ray->angle);
+	next_x += 2 * ray->mov_x;
+	while (next_x < 42 * data->x_len && next_x > 0
+		&& next_y < 42 * data->y_len && next_y > 0
+		&& data->map[(int)floor(next_y / 42)]
+		[(int)floor(next_x / 42)] != '1')
+	{
+		dx = 42;
+		dy = 42 * tan(ray->angle);
+		next_x = next_x + (dx * ray->mov_x);
+		next_y = next_y - (dy * ray->mov_x);
+	}
+	next_x -= 2 * ray->mov_x;
+	ray->x = (int)next_x;
+	ray->y = (int)next_y;
+	return (sqrt(((data->sh.x - next_x) * (data->sh.x - next_x))
+			+ (data->sh.y - next_y) * (data->sh.y - next_y)));
 }
 
-void raycating (t_data *data, t_ray *rayX, t_ray *rayY, int wallX)
+void	raycating(t_data *data, t_ray *rayX, t_ray *rayY, int wallX)
 {
-    rayX->dist = cast_coll_x(data, rayX);
-    rayY->dist = cast_coll_y(data, rayY);
-    if (rayX->x <= 0)
-        rayX->dist = 2147483647;
-    if (rayY->y <= 0)
-        rayY->dist = 2147483647;
-    if (rayX->dist < rayY->dist)
-        draw_wall_n_s(data, *rayX, wallX);
-    else if (rayX->dist > rayY->dist)
-        draw_wall_w_e(data, *rayY, wallX);
+	rayX->dist = cast_coll_x(data, rayX);
+	rayY->dist = cast_coll_y(data, rayY);
+	if (rayX->x <= 0)
+		rayX->dist = 2147483647;
+	if (rayY->y <= 0)
+		rayY->dist = 2147483647;
+	if (rayX->dist < rayY->dist)
+		draw_wall_n_s(data, *rayX, wallX);
+	else if (rayX->dist > rayY->dist)
+		draw_wall_w_e(data, *rayY, wallX);
 }

@@ -3,46 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 17:22:19 by ybachaki          #+#    #+#             */
-/*   Updated: 2023/02/09 01:19:25 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 23:19:05 by ybachaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
-
-void	init_struct(t_data *data)
-{
-	data->mlx = mlx_init();
-	data->no = NULL;
-	data->so = NULL;
-	data->we = NULL;
-	data->ea = NULL;
-	data->f = NULL;
-	data->c = NULL;
-	data->map = NULL;
-	data->x_len = 0;
-	data->y_len = 0;
-	data->spos.n = 0;
-	data->spos.e = 0;
-	data->spos.s = 0;
-	data->spos.w = 0;
-}
-
-int	ft_len(char **tab)
-{
-	int	i;
-
-	i = 0;
-	if (tab && tab[0])
-	{
-		while(tab[i])
-			i++;
-		return (i);
-	}
-	return (0);
-}
 
 char	**add(char *str, char **tab)
 {
@@ -53,13 +21,13 @@ char	**add(char *str, char **tab)
 	new = NULL;
 	if (!tab)
 	{
-		tab = calloc(2, sizeof(char*));
+		tab = calloc(2, sizeof(char *));
 		*tab = str;
 		return (tab);
 	}
 	else
 	{
-		new = calloc(ft_len(tab) + 2, sizeof(char*));
+		new = calloc(ft_len(tab) + 2, sizeof(char *));
 		while (tab[i])
 		{
 			new[i] = tab[i];
@@ -73,7 +41,7 @@ char	**add(char *str, char **tab)
 
 void	skip_spaces(char *str, int *i)
 {
-	while (str[*i] == ' ' || str[*i] == '\t')
+	while (str && (str[*i] == ' ' || str[*i] == '\t'))
 		(*i)++;
 }
 
@@ -103,7 +71,7 @@ void	free_tab(char **tab)
 	int	i;
 
 	i = 0;
-	while(tab && tab[i])
+	while (tab && tab[i])
 	{
 		free(tab[i]);
 		i++;
@@ -117,11 +85,9 @@ void	ft_free(t_data *data)
 	if (data->no)
 		free(data->no);
 	if (data->so)
-		free(data->no);
-	if (data->so)
-		free(data->we);
+		free(data->so);
 	if (data->we)
-		free(data->no);
+		free(data->we);
 	if (data->ea)
 		free(data->ea);
 	if (data->c)

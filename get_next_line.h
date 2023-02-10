@@ -6,7 +6,7 @@
 /*   By: ybachaki <ybachaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 22:02:58 by ybachaki          #+#    #+#             */
-/*   Updated: 2022/12/25 19:46:36 by ybachaki         ###   ########.fr       */
+/*   Updated: 2023/02/09 23:23:44 by ybachaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include<stdlib.h>
 # include<fcntl.h>
 # include<unistd.h>
-#include"libft.h"
+# include"libft.h"
 # define BUFFER_SIZE 10
 
 size_t	ft_strlen(const char *s);

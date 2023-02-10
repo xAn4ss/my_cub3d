@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
+/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:34:25 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 19:49:00 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 16:24:26 by an4ss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ void	cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
 	if (rayY.angle < 0)
 		rayY.angle += 2 * M_PI;
 	if (rayX.angle > M_PI / 2 && rayX.angle < M_PI * 3 / 2)
-		rayX.moveX = -1;
+		rayX.mov_x = -1;
 	else
-		rayX.moveX = 1;
+		rayX.mov_x = 1;
 	if (rayX.angle > 0 && rayX.angle < M_PI)
-		rayX.moveY = -1;
+		rayX.mov_y = -1;
 	else
-		rayX.moveY = 1;
-	rayY.moveX = rayX.moveX;
-	rayY.moveY = rayX.moveY;
+		rayX.mov_y = 1;
+	rayY.mov_x = rayX.mov_x;
+	rayY.mov_y = rayX.mov_y;
 	raycating(data, &rayX, &rayY, wallX);
 }
 
