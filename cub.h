@@ -24,22 +24,14 @@
 // #include <X11/keysym.h>
 # define SCREEN_W 1080
 # define SCREEN_H 720
-# define LEFT 0
-// # define LEFT 113
-// # define UP 122
-# define UP 13
-# define RIGHT 2/*100*/
-// # define RIGHT 100
-// # define DOWN 115
-# define DOWN 1/*1*/
+# define LEFT 97/*113*/
+# define UP 119/*122*/
+# define RIGHT 100/*100*/
+# define DOWN 115/*115*/
 # define ECHAP 53/*65307*/
-// # define ECHAP 65307
-# define ROT_LEFT 123/*65361*/
-// # define ROT_LEFT 65361
-# define ROT_RIGHT 124/*65363*/
-// # define ROT_RIGHT 65363
-# define MOVE 10
-# define CHECK 20
+# define ROT_LEFT 65361/*65361*/
+# define ROT_RIGHT 65363/*65363*/
+# define MOVE 5
 
 typedef struct s_player {
 	int		x;

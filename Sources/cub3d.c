@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:34:25 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 16:24:26 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 19:49:00 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub.h"
 
-void	cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
+void cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
 {
 	rayX.angle = fmod(rayX.angle, 2 * M_PI);
 	if (rayX.angle < 0)
@@ -33,9 +33,9 @@ void	cast_ray(t_data *data, int wallX, t_ray rayX, t_ray rayY)
 	raycating(data, &rayX, &rayY, wallX);
 }
 
-void	process_game(t_data *data, t_ray ray_x, t_ray ray_y)
+void process_game(t_data *data, t_ray ray_x, t_ray ray_y)
 {
-	int	wallx;
+	int wallx;
 
 	wallx = 0;
 	ray_y.x = (double)data->sh.x;
@@ -55,10 +55,10 @@ void	process_game(t_data *data, t_ray ray_x, t_ray ray_y)
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 }
 
-void	render_walls(t_data *data)
+void render_walls(t_data *data)
 {
-	t_ray	ray_x;
-	t_ray	ray_y;
+	t_ray ray_x;
+	t_ray ray_y;
 
 	data->sh.angle = fmod(data->sh.angle, (2 * M_PI));
 	if (data->sh.angle < 0)
@@ -67,12 +67,9 @@ void	render_walls(t_data *data)
 	process_game(data, ray_x, ray_y);
 }
 
-void	check_texture_files(t_data *data)
+void check_texture_files(t_data *data)
 {
-	if (open(data->no, O_RDONLY) == -1
-		|| open(data->ea, O_RDONLY) == -1
-		|| open(data->so, O_RDONLY) == -1
-		|| open(data->we, O_RDONLY) == -1)
+	if (open(data->no, O_RDONLY) == -1 || open(data->ea, O_RDONLY) == -1 || open(data->so, O_RDONLY) == -1 || open(data->we, O_RDONLY) == -1)
 	{
 		printf("Test file not found-_-\n");
 		exit(EXIT_FAILURE);
@@ -81,13 +78,13 @@ void	check_texture_files(t_data *data)
 	init_angle(data);
 }
 
-void	cub3d(t_data data)
+void cub3d(t_data data)
 {
 	check_texture_files(&data);
 	data.win = mlx_new_window(data.mlx, SCREEN_W, SCREEN_H, "kyub_map");
 	data.img.img = mlx_new_image(data.mlx, SCREEN_W, SCREEN_H);
 	data.img.addr = mlx_get_data_addr(data.img.img, &data.img.bpp,
-			&data.img.len, &data.img.endian);
+									  &data.img.len, &data.img.endian);
 	render_walls(&data);
 	mlx_hook(data.win, 17, 1L << 2, &quit, &data);
 	mlx_hook(data.win, 2, 1L << 0, pressed_key, &data);

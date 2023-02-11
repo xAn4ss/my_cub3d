@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 18:39:00 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/11 00:33:12 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:14:50 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,26 @@
 
 void	handle_move_x(t_data *data)
 {
-	int new_x;
-	int new_y;
+	int	new_x;
+	int	new_y;
 
 	if (data->sh.move_x == -1)
 	{
-		new_x = round(cos(-data->sh.angle - (M_PI / 2)));
-		new_y = round(sin(-data->sh.angle - (M_PI / 2)));
-		if (data->map[(data->sh.y + (new_y * 15)) / 42][(data->sh.x + (new_x * 15))/ 42] != '1')
-		{
+		new_x = round(cos(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x + (new_x * 2)) / 42] != '1')
 			data->sh.x += new_x;
+		new_y = round(sin(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[(data->sh.y + (new_y * 2)) / 42][data->sh.x / 42] != '1')
 			data->sh.y += new_y;
-		}
 	}
 	else if (data->sh.move_x == 1)
 	{
-		new_x = round(cos(-data->sh.angle - (M_PI / 2)));
-		new_y = round(sin(-data->sh.angle - (M_PI / 2)));
-		if (data->map[(data->sh.y - (new_y * 15)) / 42][(data->sh.x - (new_x * 15))/ 42] != '1')
-		{
+		new_x = round(cos(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x - (new_x * 2)) / 42] != '1')
 			data->sh.x -= new_x;
+		new_y = round(sin(-data->sh.angle - (M_PI / 2))) * (MOVE);
+		if (data->map[(data->sh.y - (new_y * 2)) / 42][data->sh.x / 42] != '1')
 			data->sh.y -= new_y;
-		}
 	}
 }
 
@@ -46,33 +44,30 @@ void	handle_move_y(t_data *data)
 
 	if (data->sh.move_y == -1)
 	{
-		new_x = round(cos(-data->sh.angle));
-		new_y = round(sin(-data->sh.angle));
-		if (data->map[(data->sh.y + (new_y * 15)) / 42][(data->sh.x + (new_x * 15)) / 42] != '1')
-		{
+		new_x = round(cos(-data->sh.angle)) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x + (new_x * 2)) / 42] != '1')
 			data->sh.x += new_x;
+		new_y = round(sin(-data->sh.angle)) * (MOVE);
+		if (data->map[(data->sh.y + (new_y * 2)) / 42][data->sh.x / 42] != '1')
 			data->sh.y += new_y;
-		}
-		// if (data->map[(int)(data->sh.y + (new_y * 15)) / 42][(int)data->sh.x / 42] != '1')
 	}
 	if (data->sh.move_y == 1)
 	{
-		new_x = round(cos(-data->sh.angle + M_PI));
-		new_y = round(sin(-data->sh.angle + M_PI));
-		if (data->map[(data->sh.y + (new_y * 15)) / 42][(data->sh.x + (new_x * 15)) / 42] != '1')
-		{
+		new_x = round(cos(-data->sh.angle + M_PI)) * (MOVE);
+		if (data->map[data->sh.y / 42][(data->sh.x + (new_x * 2)) / 42] != '1')
 			data->sh.x += new_x;
+		new_y = round(sin(-data->sh.angle + M_PI)) * (MOVE);
+		if (data->map[(data->sh.y + (new_y * 2)) / 42][data->sh.x / 42] != '1')
 			data->sh.y += new_y;
-		}
-		// if (data->map[(int)(data->sh.y + (new_y * 15)) / 42][(int)data->sh.x / 42] != '1')
 	}
 }
 
-// free
 int	pressed_key(int num, t_data *data)
 {
+	printf("-->%d\n", num);
 	if (num == ECHAP)
 		exit(0);
+// free
 	if (num == LEFT)
 		data->sh.move_x = -1;
 	else if (num == UP)
@@ -107,17 +102,17 @@ int	release_key(int num, t_data *data)
 
 int	update(t_data *data)
 {
-	if (data->i < 100)
+	if (data->i < 2000)
 	{
 		data->i++;
 		return (1);
 	}
-	else if (data->i == 100)
+	else if (data->i == 2000)
 		data->i = 0;
 	handle_move_x(data);
 	handle_move_y(data);
 	if (data->sh.rot)
-		data->sh.angle -= 10 * (M_PI / 180) * data->sh.rot;
+		data->sh.angle -= 3 * (M_PI / 180) * data->sh.rot;
 	mlx_clear_window(data->mlx, data->win);
 	render_walls(data);
 	data->i++;

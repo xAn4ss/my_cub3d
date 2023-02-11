@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: an4ss <an4ss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 09:28:43 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 16:24:26 by an4ss            ###   ########.fr       */
+/*   Updated: 2023/02/09 19:53:20 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,3 @@ void	init_rays(t_ray rayX, t_ray rayY)
 	rayY.mov_x = rayX.mov_x;
 	rayY.mov_y = rayX.mov_y;
 }
-
-void	ft_error(t_data *data)
-{
-	printf("somethin's wrong with text_file -_-\n");
-	exit(EXIT_FAILURE);
-}
-
-int	quit(int keycode, t_data *data)
-{
-	exit(0);
-}
-// should free;
