@@ -69,8 +69,14 @@ int	map_checker_02(t_data *data)
 		printf("walls problem\n");
 		return (0);
 	}
+	if (data->spos.n + data->spos.e + data->spos.s + data->spos.w != 1)
+	{
+		printf("Error\n\tproblem with player position\n");
+		return (0);
+	}
 	return (1);
 }
+
 
 int	map_checker(t_data *data)
 {

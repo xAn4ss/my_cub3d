@@ -46,13 +46,15 @@ int	check_0(char **map, int i, int len)
 	j = 0;
 	while (map[i][j])
 	{
-		if (map[i][j] == '0' && i != len - 1)
+		if ((map[i][j] == '0' || map[i][j] == 'W' || map[i][j] == 'N'
+		|| map[i][j] == 'S' || map[i][j] == 'E') && i != len - 1)
 		{
 			if (map[i + 1][j] == ' ' || map[i + 1][j] == '\t'
 			|| !check_r_l(map[i], j))
 				return (0);
 		}
-		if (map[i][j] == '0' && i != 0)
+		if ((map[i][j] == '0' || map[i][j] == 'W' || map[i][j] == 'N'
+		|| map[i][j] == 'S' || map[i][j] == 'E')&& i != 0)
 		{
 			if (map[i - 1][j] == ' ' || map[i - 1][j] == '\t'
 			|| !check_r_l(map[i], j))
