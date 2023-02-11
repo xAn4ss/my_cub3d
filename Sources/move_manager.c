@@ -6,7 +6,7 @@
 /*   By: aoukhart <aoukhart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 18:39:00 by an4ss             #+#    #+#             */
-/*   Updated: 2023/02/09 22:14:50 by aoukhart         ###   ########.fr       */
+/*   Updated: 2023/02/11 05:13:30 by aoukhart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,17 +102,17 @@ int	release_key(int num, t_data *data)
 
 int	update(t_data *data)
 {
-	if (data->i < 2000)
+	if (data->i < 300)
 	{
 		data->i++;
 		return (1);
 	}
-	else if (data->i == 2000)
+	else if (data->i == 300)
 		data->i = 0;
 	handle_move_x(data);
 	handle_move_y(data);
 	if (data->sh.rot)
-		data->sh.angle -= 3 * (M_PI / 180) * data->sh.rot;
+		data->sh.angle -= 5 * (M_PI / 180) * data->sh.rot;
 	mlx_clear_window(data->mlx, data->win);
 	render_walls(data);
 	data->i++;
