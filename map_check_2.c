@@ -77,6 +77,19 @@ int	map_checker_02(t_data *data)
 	return (1);
 }
 
+int	left_walls(t_data *data, int i)
+{
+	int	j;
+
+	j = ft_strlen(data->map[i]) - 1;
+	while(j >= 0 && (data->map[i][j] == ' ' || data->map[i][j] == '\t'))
+		j--;
+	if (j == 0)
+		return (0);
+	if (data->map[i][j] == '1')
+		return (1);
+	return 0;
+}
 
 int	map_checker(t_data *data)
 {
@@ -89,7 +102,7 @@ int	map_checker(t_data *data)
 		j = 0;
 		skip_spaces(data->map[i], &j);
 		if (data->map[i][j] != '1'
-		|| data->map[i][ft_strlen(data->map[i]) - 1] != '1')
+		|| /*data->map[i][ft_strlen(data->map[i]) - 1] != '1'*/ !left_walls(data, j))
 		{
 			printf("Error\n\tThe map must be closed/surrounded by walls\n");
 			return (0);
